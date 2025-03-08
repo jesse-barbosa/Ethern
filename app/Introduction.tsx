@@ -28,7 +28,7 @@ export default function Introduction() {
       
       <View className="m-6">
         <TouchableOpacity 
-          onPress={() => (navigation as any).navigate('Home')} 
+          onPress={() => (navigation as any).navigate('Login')} 
           className="flex flex-row px-4 items-center justify-between w-full bg-blue-500 py-4 rounded-lg shadow-xl"
         >
           <View />

@@ -8,6 +8,8 @@ import './global.css';
 
 // Screens
 import IntroductionScreen from 'app/Introduction';
+import RegisterScreen from 'app/Register';
+import LoginScreen from 'app/Login';
 import HomeScreen from 'app/Home';
 
 export default function App() {
@@ -18,6 +20,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Introduction">
           <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false, animation: 'none' }} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false, animation: 'none' }} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'none' }} />
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false, animation: 'none' }} />
         </Stack.Navigator>
       </NavigationContainer>
