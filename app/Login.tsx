@@ -53,11 +53,11 @@ export default function Home() {
       <View className="m-6">
         <TouchableOpacity 
           onPress={handleRegister} 
-          className="flex flex-row px-4 items-center justify-between w-full bg-yellow-200 py-4 rounded-lg shadow-xl"
+          className="flex flex-row px-4 items-center justify-between w-full bg-blue-500 py-4 rounded-lg shadow-xl"
         >
           <View />
-          <Text className="text-xl font-semibold">Entrar</Text>
-          <ArrowBigRightDash size={30} color="#000" />
+          <Text className="text-xl text-white font-semibold">Entrar</Text>
+          <ArrowBigRightDash size={30} color="#fff" />
         </TouchableOpacity>
         <View className="flex flex-row items-center justify-center">
           <Text className="text-neutral-600 text-center mt-4">Não tem uma conta?</Text>
