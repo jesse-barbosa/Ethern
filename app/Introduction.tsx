@@ -7,10 +7,14 @@ export default function Introduction() {
   const navigation = useNavigation();
 
   return (
-    <View className="flex-1 py-12 bg-white">
+    <View className="flex-1 bg-white">
       
-      <View className="flex-1 flex items-center justify-center">
-        <Image className="w-full h-[600px]" source={require('../assets/images/ilustration.png')} resizeMode="contain" />
+      <View className="flex-1 flex items-center justify-center px-2">
+        <Image 
+          className="w-full h-[420px] rounded-2xl overflow-hidden" 
+          source={require('../assets/images/ilustration.jpg')} 
+          
+        />
       </View>
       
       <View className="px-6">
@@ -25,11 +29,11 @@ export default function Introduction() {
       <View className="m-6">
         <TouchableOpacity 
           onPress={() => (navigation as any).navigate('Home')} 
-          className="flex flex-row px-4 items-center justify-between w-full bg-yellow-200 py-4 rounded-lg shadow-xl"
+          className="flex flex-row px-4 items-center justify-between w-full bg-blue-500 py-4 rounded-lg shadow-xl"
         >
           <View />
-          <Text className="text-xl font-semibold">Entrar</Text>
-          <ArrowBigRightDash size={30} color="#000" />
+          <Text className="text-xl text-white font-semibold">Continuar</Text>
+          <ArrowBigRightDash size={30} color="#fff" />
         </TouchableOpacity>
       </View>
       
