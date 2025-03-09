@@ -1,7 +1,7 @@
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { Square, SquareCheck } from 'lucide-react-native';
+import { Square, SquareCheck, Plus } from 'lucide-react-native';
 import Header from "../components/Header";
 import Menu from "../components/Menu";
 
@@ -41,6 +41,9 @@ export default function Home() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <TouchableOpacity className="bg-blue-500 flex items-center justify-center absolute bottom-32 right-6 p-4 rounded-full shadow-lg">
+        <Plus size={36} color='#fff'/>
+      </TouchableOpacity>
       <Menu />
     </View>
   );
