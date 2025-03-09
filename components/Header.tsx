@@ -1,5 +1,4 @@
 import { View, TouchableOpacity, Text, Image } from 'react-native';
-import { ClipboardList, Settings } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Header() {
