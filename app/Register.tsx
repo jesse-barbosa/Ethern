@@ -65,34 +65,34 @@ export default function Register() {
       <View className="flex-1 flex flex-col items-center justify-center px-8 mt-8">
 
         {/* Input - Nome */}
-        <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
+        <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
           <UserRound size={22} color="#8B8787" />
           <TextInput
             placeholder="Nome"
-            className="flex-1 text-md text-neutral-700"
+            className="flex-1 text-md text-neutral-700 py-5"
             value={name}
             onChangeText={setName}
           />
         </View>
 
         {/* Input - Email */}
-        <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
+        <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
           <AtSign size={22} color="#8B8787" />
           <TextInput
             placeholder="Email"
-            className="flex-1 text-md text-neutral-700"
+            className="flex-1 text-md text-neutral-700 py-5"
             value={email}
             onChangeText={setEmail}
           />
         </View>
 
         {/* Input - Password */}
-        <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
+        <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
           <KeyRound size={22} color="#8B8787" />
           <TextInput
             placeholder="Senha"
             secureTextEntry={!showPassword}
-            className="flex-1 text-md text-neutral-700"
+            className="flex-1 text-md text-neutral-700 py-5"
             value={password}
             onChangeText={setPassword}
           />
