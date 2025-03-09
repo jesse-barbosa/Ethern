@@ -1,40 +1,35 @@
-import { supabase } from '../services/supabase';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native'
-import { AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from 'lucide-react-native';
-import { useState } from 'react';
+import { supabase } from "../services/supabase";
+import { useState } from "react";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
 
-export default function Home() {
+export default function Login() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    // Usando o Supabase para login
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-  
+
     if (error) {
-      alert(error.message);
+      alert("Erro ao fazer login: " + error.message);
       return;
     }
-  
-    // Verifica se o e-mail foi confirmado
-    if (!data.user?.email_confirmed_at) {
-      alert('Por favor, confirme seu e-mail antes de fazer login.');
-      return;
-    }
-  
-    alert('Login bem-sucedido!');
-    (navigation as any).navigate('Home');
+
+    console.log("Login bem-sucedido:", data?.user);
+    (navigation as any).navigate("Home");
   };
-  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  }
+  };
+
   return (
     <View className="flex-1">
       <View className="w-full flex items-center justify-center py-6">
@@ -88,7 +83,9 @@ export default function Home() {
           <TouchableOpacity 
             onPress={() => (navigation as any).navigate('Register')} 
             className="flex flex-row items-center text-neutral-700 text-center mt-4"
-          ><Text className="text-blue-500 ms-1 font-medium">Crie uma</Text></TouchableOpacity>
+          >
+            <Text className="text-blue-500 ms-1 font-medium">Crie uma</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -1,37 +1,61 @@
-import { supabase } from '../services/supabase';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native'
-import { UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from 'lucide-react-native';
-import { useState } from 'react';
+import { supabase } from "../services/supabase";
+import { useState } from "react";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
 
 export default function Register() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
-  const [nome, setNome] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleRegister = async () => {
+    // Criar usuário na autenticação do Supabase
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: { nome },
-      },
     });
   
     if (error) {
-      alert(error.message);
-    } else {
-      alert('Registro bem-sucedido! Verifique seu e-mail antes de fazer login.');
-      console.log('Usuário registrado:', data);
+      console.log("Erro ao criar usuário:", error.message);
+      alert(`Erro ao criar usuário: ${error.message}`);
+      return;
     }
-  };
   
+    console.log("Usuário criado com sucesso:", data.user);
+  
+    // Inserir dados adicionais na tabela 'users'
+    const { error: insertError } = await supabase.from("users").insert([
+      {
+        user_id: data.user?.id, // O UUID do usuário criado
+        name,
+        email,
+      },
+    ]);
+  
+    if (insertError) {
+      console.error("Erro ao inserir dados adicionais:", insertError.message);
+      alert(`Erro ao inserir dados adicionais: ${insertError.message}`);
+  
+      // Rollback: excluir o usuário da autenticação do Supabase (se o user_id existir)
+      if (data.user?.id) {
+        await supabase.auth.admin.deleteUser(data.user.id);
+        console.log("Usuário removido devido a erro na inserção de dados adicionais.");
+      }
+  
+      return;
+    }
+  
+    console.log("Dados adicionais inseridos com sucesso!");
+    (navigation as any).navigate("Home");
+  };  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  }
+  };
+
   return (
     <View className="flex-1">
       <View className="w-full flex items-center justify-center py-6">
@@ -46,8 +70,8 @@ export default function Register() {
           <TextInput
             placeholder="Nome"
             className="flex-1 text-md text-neutral-700"
-            value={nome}
-            onChangeText={setNome}
+            value={name}
+            onChangeText={setName}
           />
         </View>
 
@@ -96,7 +120,9 @@ export default function Register() {
           <TouchableOpacity 
             onPress={() => (navigation as any).navigate('Login')} 
             className="flex flex-row items-center text-neutral-700 text-center mt-4"
-          ><Text className="text-blue-500 ms-1 font-medium">Faça Login</Text></TouchableOpacity>
+          >
+            <Text className="text-blue-500 ms-1 font-medium">Faça Login</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
