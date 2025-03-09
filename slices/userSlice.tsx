@@ -4,14 +4,12 @@ interface UserState {
   id: number;
   name: string;
   email: string;
-  imageURL: string;
 }
 
 const initialState: UserState = {
   id: 0,
   name: '',
   email: '',
-  imageURL: '',
 };
 
 const userSlice = createSlice({
@@ -22,7 +20,6 @@ const userSlice = createSlice({
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.email = action.payload.email;
-      state.imageURL = action.payload.imageURL;
     },
   },
 });

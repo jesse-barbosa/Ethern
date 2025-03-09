@@ -1,5 +1,7 @@
 import { supabase } from "../services/supabase";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
@@ -10,19 +12,40 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+
   const handleLogin = async () => {
-    // Usando o Supabase para login
+    // Login via Supabase Auth
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      alert("Erro ao fazer login: " + error.message);
+    if (error || !data?.user) {
+      alert("Erro ao fazer login: " + (error?.message || "Usuário não encontrado"));
       return;
     }
 
-    console.log("Login bem-sucedido:", data?.user);
+    console.log("Login bem-sucedido:", data.user);
+
+    // Buscar os dados do usuário na tabela 'users'
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("id, name, email")
+      .eq("user_id", data.user.id)
+      .single();
+
+    if (userError || !userData) {
+      alert("Erro ao buscar informações do usuário.");
+      return;
+    }
+
+    console.log("Usuário carregado:", userData);
+
+    // Salva usuário no Redux
+    dispatch(setUser(userData));
+
+    // Redirecionar para Home
     (navigation as any).navigate("Home");
   };
 

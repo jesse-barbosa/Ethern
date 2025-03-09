@@ -1,5 +1,7 @@
 import { supabase } from "../services/supabase";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
@@ -11,46 +13,62 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+
   const handleRegister = async () => {
     // Criar usuário na autenticação do Supabase
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
-  
-    if (error) {
-      console.log("Erro ao criar usuário:", error.message);
-      alert(`Erro ao criar usuário: ${error.message}`);
+
+    if (error || !data?.user) {
+      alert(`Erro ao criar usuário: ${error?.message || "Usuário não encontrado"}`);
       return;
     }
-  
+
     console.log("Usuário criado com sucesso:", data.user);
-  
-    // Inserir dados adicionais na tabela 'users'
+
+    // Inserir dados na tabela 'users'
     const { error: insertError } = await supabase.from("users").insert([
       {
-        user_id: data.user?.id, // O UUID do usuário criado
+        user_id: data.user.id, // O UUID do usuário criado
         name,
         email,
       },
     ]);
-  
+
     if (insertError) {
       console.error("Erro ao inserir dados adicionais:", insertError.message);
       alert(`Erro ao inserir dados adicionais: ${insertError.message}`);
-  
-      // Rollback: excluir o usuário da autenticação do Supabase (se o user_id existir)
-      if (data.user?.id) {
-        await supabase.auth.admin.deleteUser(data.user.id);
-        console.log("Usuário removido devido a erro na inserção de dados adicionais.");
-      }
-  
+
+      // Rollback: excluir o usuário da autenticação
+      await supabase.auth.admin.deleteUser(data.user.id);
+      console.log("Usuário removido devido a erro na inserção de dados adicionais.");
+
       return;
     }
-  
-    console.log("Dados adicionais inseridos com sucesso!");
+
+    // Buscar os dados do usuário na tabela 'users'
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("id, name, email")
+      .eq("user_id", data.user.id)
+      .single();
+
+    if (userError || !userData) {
+      alert("Erro ao buscar informações do usuário.");
+      return;
+    }
+
+    console.log("Usuário salvo na Store:", userData);
+
+    // Salva usuário no Redux
+    dispatch(setUser(userData));
+
+    // Redirecionar para Home
     (navigation as any).navigate("Home");
-  };  
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
