@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from "react-native";
 import { ClipboardList, Settings } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,7 +11,7 @@ export default function Menu() {
             <ClipboardList size={28} color='#fff' />
             <Text className="text-md mt-1 text-white">Tarefas</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => (navigation as any).navigate("Home")} className="flex items-center rounded-lg p-3">
+        <TouchableOpacity onPress={() => (navigation as any).navigate("Settings")} className="flex items-center rounded-lg p-3">
             <Settings size={28} color='#fff' />
             <Text className="text-md mt-1 text-white">Configs</Text>
         </TouchableOpacity>
