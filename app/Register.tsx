@@ -1,16 +1,33 @@
+import { supabase } from '../services/supabase';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
 import { UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from 'lucide-react-native';
 import { useState } from 'react';
 
-export default function Home() {
+export default function Register() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
-    // Logic to create user
-    (navigation as any).navigate('Home');
-  }
+  const handleRegister = async () => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nome },
+      },
+    });
+  
+    if (error) {
+      alert(error.message);
+    } else {
+      alert('Registro bem-sucedido! Verifique seu e-mail antes de fazer login.');
+      console.log('Usuário registrado:', data);
+    }
+  };
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -26,28 +43,34 @@ export default function Home() {
         {/* Input - Nome */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
           <UserRound size={26} color="#8B8787" />
-          <TextInput 
-            placeholder="Nome" 
+          <TextInput
+            placeholder="Nome"
             className="flex-1 text-md text-neutral-700"
+            value={nome}
+            onChangeText={setNome}
           />
         </View>
 
         {/* Input - Email */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
           <AtSign size={26} color="#8B8787" />
-          <TextInput 
-            placeholder="Email" 
+          <TextInput
+            placeholder="Email"
             className="flex-1 text-md text-neutral-700"
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
 
         {/* Input - Password */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
           <KeyRound size={26} color="#8B8787" />
-          <TextInput 
-            placeholder="Senha" 
+          <TextInput
+            placeholder="Senha"
             secureTextEntry={!showPassword}
             className="flex-1 text-md text-neutral-700"
+            value={password}
+            onChangeText={setPassword}
           />
           <TouchableOpacity onPress={togglePasswordVisibility} className="flex-shrink-0">
             {showPassword ? (

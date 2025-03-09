@@ -1,16 +1,36 @@
+import { supabase } from '../services/supabase';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
-import { UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from 'lucide-react-native';
+import { AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from 'lucide-react-native';
 import { useState } from 'react';
 
 export default function Home() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
-    // Logic to create user
+  const handleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+  
+    if (error) {
+      alert(error.message);
+      return;
+    }
+  
+    // Verifica se o e-mail foi confirmado
+    if (!data.user?.email_confirmed_at) {
+      alert('Por favor, confirme seu e-mail antes de fazer login.');
+      return;
+    }
+  
+    alert('Login bem-sucedido!');
     (navigation as any).navigate('Home');
-  }
+  };
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -29,6 +49,8 @@ export default function Home() {
           <TextInput 
             placeholder="Email" 
             className="flex-1 text-md text-neutral-700"
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
 
@@ -39,6 +61,8 @@ export default function Home() {
             placeholder="Senha" 
             secureTextEntry={!showPassword}
             className="flex-1 text-md text-neutral-700"
+            value={password}
+            onChangeText={setPassword}
           />
           <TouchableOpacity onPress={togglePasswordVisibility} className="flex-shrink-0">
             {showPassword ? (
@@ -52,7 +76,7 @@ export default function Home() {
       </View>
       <View className="m-6">
         <TouchableOpacity 
-          onPress={handleRegister} 
+          onPress={handleLogin} 
           className="flex flex-row px-4 items-center justify-between w-full bg-blue-500 py-4 rounded-lg shadow-xl"
         >
           <View />

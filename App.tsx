@@ -1,4 +1,5 @@
 import React from 'react';
+import 'react-native-url-polyfill/auto';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
