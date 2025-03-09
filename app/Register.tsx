@@ -42,7 +42,7 @@ export default function Register() {
 
         {/* Input - Nome */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
-          <UserRound size={26} color="#8B8787" />
+          <UserRound size={22} color="#8B8787" />
           <TextInput
             placeholder="Nome"
             className="flex-1 text-md text-neutral-700"
@@ -53,7 +53,7 @@ export default function Register() {
 
         {/* Input - Email */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
-          <AtSign size={26} color="#8B8787" />
+          <AtSign size={22} color="#8B8787" />
           <TextInput
             placeholder="Email"
             className="flex-1 text-md text-neutral-700"
@@ -64,7 +64,7 @@ export default function Register() {
 
         {/* Input - Password */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2 py-2">
-          <KeyRound size={26} color="#8B8787" />
+          <KeyRound size={22} color="#8B8787" />
           <TextInput
             placeholder="Senha"
             secureTextEntry={!showPassword}
@@ -74,9 +74,9 @@ export default function Register() {
           />
           <TouchableOpacity onPress={togglePasswordVisibility} className="flex-shrink-0">
             {showPassword ? (
-              <EyeOff size={26} color="#8B8787" />
+              <EyeOff size={22} color="#8B8787" />
             ) : (
-              <Eye size={26} color="#8B8787" />
+              <Eye size={22} color="#8B8787" />
             )}
           </TouchableOpacity>
         </View>
