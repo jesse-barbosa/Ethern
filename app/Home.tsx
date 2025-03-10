@@ -30,7 +30,27 @@ export default function Home() {
   };
 
   const changeStatus = async (id: number) => {
-    // Logic to change status
+    // Verify if task exists
+    const task = tasks.find((t) => t.id === id);
+    
+    if (!task) {
+      console.error('Task not found');
+      return;
+    }
+  
+    // Invert value (0 or 1)
+    const newStatus = task.status ? 0 : 1;
+  
+    const { data: response, error } = await supabase
+      .from('tasks')
+      .update({ status: newStatus }) // Updating with inverse status
+      .eq('id', id);
+  
+    if (error) {
+      console.error('Error updating task status:', error);
+    } else {
+      fetchTasks();
+    }
   };  
 
   return (
