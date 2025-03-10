@@ -51,7 +51,28 @@ export default function Home() {
     } else {
       fetchTasks();
     }
-  };  
+  };
+
+  const deleteTask = async (id: number) => {
+    // Verify if task exists
+    const task = tasks.find((t) => t.id === id);
+    
+    if (!task) {
+      console.error('Task not found');
+      return;
+    }
+  
+    const { data: response, error } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('id', id);
+  
+    if (error) {
+      console.error('Error deleting task:', error);
+    } else {
+      fetchTasks();
+    }
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -83,7 +104,7 @@ export default function Home() {
                 <Text className={`text-lg font-light text-neutral-600 ${task.status ? 'line-through' : ''}`}>{task.message}</Text>
               </View>
 
-              <TouchableOpacity className="flex items-center justify-center rounded-full">
+              <TouchableOpacity onPress={() => deleteTask(task.id)} className="flex items-center justify-center rounded-full">
                 <Trash2 size={24} color={'#FF4646'} />
               </TouchableOpacity>
             </TouchableOpacity>
