@@ -13,7 +13,6 @@ export default function Introduction() {
         <Image 
           className="w-full h-[420px] rounded-2xl overflow-hidden" 
           source={require('../assets/images/ilustration.jpg')} 
-          
         />
       </View>
       

@@ -21,7 +21,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Introduction">
-          <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false, animation: 'none' }} />
+          <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false, }} />
           <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false, animation: 'none' }} />
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'none' }} />
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false, animation: 'none' }} />

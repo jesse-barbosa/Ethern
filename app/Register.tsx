@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
+import { ChevronLeft, UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -76,8 +76,16 @@ export default function Register() {
 
   return (
     <View className="flex-1">
-      <View className="w-full flex items-center justify-center py-6">
-        <Text className="font-extrabold text-3xl">Lumina</Text>
+      <View className="w-full flex flex-row items-center justify-between pt-8 px-2">
+        <TouchableOpacity
+          onPress={() => (navigation as any).navigate("Introduction")}
+          className="flex items-center justify-center rounded-full bg-blue-500 p-2"
+        >
+          <ChevronLeft size={32} color="#fff" />
+        </TouchableOpacity>
+
+        <Text className="font-extrabold text-4xl mr-12">Lumina</Text>
+        <View />
       </View>
       {/* Inputs */}
       <View className="flex-1 flex flex-col items-center justify-center px-8 mt-8">
