@@ -5,11 +5,14 @@ import { RootState } from '../store';
 import { CheckCheck, Square, SquareCheck, Trash2, Plus } from 'lucide-react-native';
 import Header from "../components/Header";
 import Menu from "../components/Menu";
+import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const user = useSelector((state: RootState) => state.user);
   const [tasks, setTasks] = useState<{ id: number, title: string; message: string; status: boolean; }[]>([]);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [selectedDeleteTaskId, setSelectedDeleteTaskId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchTasks();
@@ -53,27 +56,27 @@ export default function Home() {
     }
   };
 
-  const deleteTask = async (id: number) => {
-    // Verify if task exists
-    const task = tasks.find((t) => t.id === id);
-    
-    if (!task) {
-      console.error('Task not found');
-      return;
-    }
+  const handleDeletePress = (id: number) => {
+    setSelectedDeleteTaskId(id);
+    setIsDeleteModalVisible(true);
+  };  
+
+  const confirmDeleteTask = async () => {
+    if (!selectedDeleteTaskId) return;
   
     const { data: response, error } = await supabase
       .from('tasks')
       .delete()
-      .eq('id', id);
+      .eq('id', selectedDeleteTaskId);
   
     if (error) {
       console.error('Error deleting task:', error);
     } else {
       fetchTasks();
+      setIsDeleteModalVisible(false);
     }
   };
-
+  
   return (
     <View className="flex-1 bg-white">
       <ScrollView>
@@ -104,7 +107,7 @@ export default function Home() {
                 <Text className={`text-lg font-light text-neutral-600 ${task.status ? 'line-through' : ''}`}>{task.message}</Text>
               </View>
 
-              <TouchableOpacity onPress={() => deleteTask(task.id)} className="flex items-center justify-center rounded-full">
+              <TouchableOpacity onPress={() => handleDeletePress(task.id)} className="flex items-center justify-center rounded-full">
                 <Trash2 size={24} color={'#FF4646'} />
               </TouchableOpacity>
             </TouchableOpacity>
@@ -116,6 +119,14 @@ export default function Home() {
         <Plus size={36} color='#fff'/>
       </TouchableOpacity>
       <Menu />
+
+      {/* Modals */}
+      <ConfirmDeleteModal
+        visible={isDeleteModalVisible}
+        onCancel={() => setIsDeleteModalVisible(false)}
+        onConfirm={confirmDeleteTask}
+      />
+
     </View>
   );
 }
