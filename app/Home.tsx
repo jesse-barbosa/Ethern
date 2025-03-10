@@ -5,12 +5,16 @@ import { RootState } from '../store';
 import { CheckCheck, Square, SquareCheck, Trash2, Plus } from 'lucide-react-native';
 import Header from "../components/Header";
 import Menu from "../components/Menu";
+import TaskModal from '../components/modals/TaskModal';
 import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const user = useSelector((state: RootState) => state.user);
   const [tasks, setTasks] = useState<{ id: number, title: string; message: string; status: boolean; }[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [action, setAction] = useState<'create' | 'edit'>('create');
+  const [selectedEditTaskId, setSelectedEditTaskId] = useState<number | null>(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedDeleteTaskId, setSelectedDeleteTaskId] = useState<number | null>(null);
 
@@ -56,10 +60,51 @@ export default function Home() {
     }
   };
 
+  const confirmTask = async (title: string, message: string) => {
+    if (action === 'edit') {
+      if (!selectedEditTaskId) return;
+  
+      const { error } = await supabase
+        .from('tasks')
+        .update({ title, message })
+        .eq('id', selectedEditTaskId);
+  
+      if (error) {
+        console.error('Error updating task:', error);
+      } else {
+        fetchTasks();
+      }
+    } else {
+      const { error } = await supabase
+        .from('tasks')
+        .insert([{ title, message, status: 0, user_id: user.id }]);
+  
+      if (error) {
+        console.error('Error inserting new task:', error);
+      } else {
+        fetchTasks();
+      }
+    }
+  
+    setIsModalVisible(false);
+    setSelectedEditTaskId(null);
+  };
+  
+  const handleEditPress = (title: string, message: string, id: number) => {
+    setSelectedEditTaskId(id);
+    setAction('edit');
+    setIsModalVisible(true);
+  };
+
+  const handleCreatePress = () => {
+    setAction('create');
+    setIsModalVisible(true);
+  };
+
   const handleDeletePress = (id: number) => {
     setSelectedDeleteTaskId(id);
     setIsDeleteModalVisible(true);
-  };  
+  };
 
   const confirmDeleteTask = async () => {
     if (!selectedDeleteTaskId) return;
@@ -91,6 +136,7 @@ export default function Home() {
             ) : (
             tasks.map((task, index) => (
             <TouchableOpacity
+            onPress={() => handleEditPress(task.title, task.message, task.id)}
               key={index}
               className={`bg-white flex flex-row items-center w-full p-6 rounded-xl shadow-lg ${task.status ? 'opacity-70' : ''}`}
             >
@@ -102,9 +148,13 @@ export default function Home() {
                 )}
               </TouchableOpacity>
 
-              <View className="flex flex-col w-5/6 ms-2">
+              <View className="flex flex-col w-5/6 ms-3">
                 <Text className={`text-xl mb-1 ${task.status ? 'line-through' : ''}`}>{task.title}</Text>
-                <Text className={`text-lg font-light text-neutral-600 ${task.status ? 'line-through' : ''}`}>{task.message}</Text>
+                {task.message.length > 0 && (
+                  <Text className={`text-lg font-light text-neutral-600 ${task.status ? 'line-through' : ''}`}>
+                    {task.message}
+                  </Text>
+                )}
               </View>
 
               <TouchableOpacity onPress={() => handleDeletePress(task.id)} className="flex items-center justify-center rounded-full">
@@ -115,12 +165,21 @@ export default function Home() {
           )}
         </View>
       </ScrollView>
-      <TouchableOpacity className="bg-blue-500 flex items-center justify-center absolute bottom-32 right-6 p-4 rounded-full shadow-lg">
+      <TouchableOpacity onPress={() => handleCreatePress()} className="bg-blue-500 flex items-center justify-center absolute bottom-32 right-6 p-4 rounded-full shadow-lg">
         <Plus size={36} color='#fff'/>
       </TouchableOpacity>
       <Menu />
 
       {/* Modals */}
+      <TaskModal
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        action={action}
+        onConfirm={confirmTask}
+        editTitle={action === 'edit' ? tasks.find(task => task.id === selectedEditTaskId)?.title : ''}
+        editMessage={action === 'edit' ? tasks.find(task => task.id === selectedEditTaskId)?.message : ''}
+      />
+
       <ConfirmDeleteModal
         visible={isDeleteModalVisible}
         onCancel={() => setIsDeleteModalVisible(false)}
