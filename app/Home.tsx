@@ -28,13 +28,15 @@ export default function Home() {
       .from('tasks')
       .select('id, title, message, status')
       .eq('user_id', user.id);
-
+  
     if (error) {
       console.error('Error fetching tasks:', error);
     } else {
-      setTasks(fetchedTasks || []);
+      // Sort tasks: First, tasks with status 0, then tasks with status 1
+      const sortedTasks = fetchedTasks.sort((a, b) => a.status - b.status);
+      setTasks(sortedTasks);
     }
-  };
+  };  
 
   const changeStatus = async (id: number) => {
     // Verify if task exists
