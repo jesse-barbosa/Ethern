@@ -17,8 +17,13 @@ export default function TaskModal({ visible, onCancel, action, onConfirm, editTi
   const [isChanged, setIsChanged] = useState(false)
 
   useEffect(() => {
-    setTitle(editTitle || '');
-    setMessage(editMessage || '');
+    if(action === "edit"){
+      setTitle(editTitle || '');
+      setMessage(editMessage || '');
+    } else {
+      setTitle('');
+      setMessage('');
+    }
     setIsChanged(false);
   }, [editTitle, editMessage]);
   
