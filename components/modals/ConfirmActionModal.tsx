@@ -36,27 +36,30 @@ const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({ visible, onCanc
           />
 
           <View className="flex-row justify-between">
-            <TouchableOpacity
-              onPress={onCancel}
-              disabled={isLoading}
-              className="bg-neutral-300 w-1/2 px-4 py-3 rounded-lg"
-            >
-              <Text className="text-black text-center">Cancelar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={handleConfirm}
-              disabled={isLoading}
-              className="bg-blue-500 w-1/2 px-4 py-3 rounded-lg flex-row justify-center"
-            >
-              {isLoading ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <Text className="text-white text-center">
-                  {action === 'delete' ? 'Excluir' : 'Salvar'}
-                </Text>
-              )}
-            </TouchableOpacity>
+            <View className="w-1/2 pe-2">
+              <TouchableOpacity
+                onPress={onCancel}
+                disabled={isLoading}
+                className="bg-neutral-300 px-4 py-3 rounded-lg"
+              >
+                <Text className="text-black text-center">Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+            <View className="w-1/2 pe-2">
+              <TouchableOpacity
+                onPress={handleConfirm}
+                disabled={isLoading}
+                className="bg-blue-500 px-4 py-3 rounded-lg flex-row justify-center"
+              >
+                {isLoading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text className="text-white text-center">
+                    {action === 'delete' ? 'Excluir' : 'Salvar'}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
