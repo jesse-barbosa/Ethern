@@ -30,6 +30,12 @@ export default function Settings() {
     setIsModalVisible(true);
   };
 
+  interface UserData {
+    id: number;
+    name: string;
+    email: string;
+  }
+
   const handleSaveChanges = async (password: string) => {
     // Verificar a senha para garantir que a pessoa tenha permissão para salvar as mudanças
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -59,14 +65,20 @@ export default function Settings() {
       .from("users")
       .update({ name, email })
       .eq("user_id", data.user.id)
-      .single();
+      .select()
+      .single<UserData>();
   
     if (updateError) {
       Alert.alert("Erro", "Erro ao atualizar dados");
       return;
     }
   
-    dispatch(setUser(updatedData));  // Atualizando no Redux
+    // Atualiza os dados no Redux e no estado local
+    dispatch(setUser(updatedData));
+    setName(updatedData.name);
+    setEmail(updatedData.email);
+    setIsChanged(false);
+    
     Alert.alert("Sucesso", "Alterações salvas com sucesso!");
   };
   
@@ -154,12 +166,13 @@ export default function Settings() {
             <AtSign size={22} color="#8B8787" />
             <TextInput
               placeholder="Email"
-              className="flex-1 text-lg text-neutral-800 py-5"
+              className="flex-1 text-lg text-neutral-800 py-5 opacity-90"
               value={email}
               onChangeText={(text) => {
                 setEmail(text);
                 setIsChanged(true);
               }}
+              readOnly
             />
           </View>
         </View>
