@@ -3,22 +3,16 @@
     "name": "Lumina",
     "slug": "Lumina",
     "version": "1.0.0",
-
     "web": {
       "favicon": "./assets/icon.png"
     },
-
     "experiments": {
       "tsconfigPaths": true
     },
-
     "plugins": [],
-
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "./assets/icon.png",
       "resizeMode": "contain",
@@ -26,13 +20,16 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "newArchEnabled": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
-    }
+      },
+      "newArchEnabled": true
+    },
+    "newArchEnabled": true
   }
 }
