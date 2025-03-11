@@ -140,7 +140,7 @@ export default function Settings() {
 
   return (
     <View className="flex-1">
-      <ScrollView className="flex-1 bg-white">
+      <ScrollView className="flex-1">
         <Text className="text-3xl font-medium mt-8 mx-3 mb-4">Configurações</Text>
 
         <View className="flex items-center py-4">
@@ -192,7 +192,7 @@ export default function Settings() {
         <View className="mt-8 border-t-2 border-neutral-400 pt-4 px-1">
           <TouchableOpacity 
             onPress={handleLogout}
-            className="flex flex-row items-center justify-center w-full bg-white py-8 rounded-xl border-t-0 border border-neutral-400"
+            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-7 rounded-xl border-t-0 border border-neutral-400"
           >
             <LogOut size={22} color="black" />
             <Text className="text-xl text-black font-semibold ml-4">Sair da Conta</Text>
@@ -200,7 +200,7 @@ export default function Settings() {
 
           <TouchableOpacity 
             onPress={handleDeleteAccount}
-            className="flex flex-row items-center justify-center w-full bg-white py-8 rounded-xl border-t-0 border mt-1 border-neutral-400"
+            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-7 rounded-xl border-t-0 border mt-1 border-neutral-400"
           >
             <Trash size={22} color="red" />
             <Text className="text-xl text-red-600 font-semibold ml-4">Excluir Conta</Text>

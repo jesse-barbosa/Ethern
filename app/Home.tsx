@@ -125,15 +125,17 @@ export default function Home() {
   };
   
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 ">
       <ScrollView>
         <Header />
+        <Text className="text-3xl text-center my-5">Minhas Tarefas</Text>
         <View className="px-3 gap-2">
-          <Text className="text-3xl text-center my-4">Tarefas</Text>
           {tasks.length === 0 ? (
               <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
-                <CheckCheck size={32} color={'#000'} />
-                <Text className="text-xl mb-1">Nada a fazer!</Text>
+                <View className="bg-green-100 p-2 rounded-full">
+                  <CheckCheck size={28} color={'#0AC600'} />
+                </View>
+                <Text className="text-xl my-2">Tudo feito, parabéns!</Text>
             </View>
             ) : (
             tasks.map((task, index) => (
