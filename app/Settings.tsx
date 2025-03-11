@@ -1,32 +1,143 @@
+import { supabase } from "../services/supabase";
 import { useState } from "react";
-import { ScrollView, View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
-import { useSelector } from "react-redux";
+import { ScrollView, View, Text, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
-import { UserRound, AtSign } from "lucide-react-native";
+import { UserRound, AtSign, LogOut, Trash } from "lucide-react-native";
 import Menu from "../components/Menu";
+import ConfirmActionModal from "../components/modals/ConfirmActionModal";
+import { logoutUser, setUser } from "../slices/userSlice";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Settings() {
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
-  const [isChanged, setIsChanged] = useState(false)
+  const [isChanged, setIsChanged] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalAction, setModalAction] = useState<'save' | 'delete'>('save');
 
-  const saveChanges = () => {
-    // Salvar alterações no banco e no Redux
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    (navigation as any).navigate("Introduction");
+  };
+
+  const handleDeleteAccount = () => {
+    setModalAction('delete');
+    setIsModalVisible(true);
+  };
+
+  const handleSaveChanges = async (password: string) => {
+    // Verificar a senha para garantir que a pessoa tenha permissão para salvar as mudanças
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: user?.email!,
+      password,
+    });
+  
+    if (error || !data.user) {
+      Alert.alert("Erro", "Senha incorreta");
+      return;
+    }
+  
+    // Buscanbdo os dados na tabela 'users', utilizando o UUID do 'user.id' retornado da autenticação
+    const { data: userData, error: userDataError } = await supabase
+      .from("users")
+      .select("id, name, email")  // Campos da tabela 'users'
+      .eq("user_id", data.user.id)  // Usando o UUID do usuário da tabela interna
+      .single();
+  
+    if (userDataError || !userData) {
+      Alert.alert("Erro", "Erro ao buscar dados do usuário.");
+      return;
+    }
+  
+    // Atualizando o nome e o email no banco de dados
+    const { data: updatedData, error: updateError } = await supabase
+      .from("users")
+      .update({ name, email })
+      .eq("user_id", data.user.id)
+      .single();
+  
+    if (updateError) {
+      Alert.alert("Erro", "Erro ao atualizar dados");
+      return;
+    }
+  
+    dispatch(setUser(updatedData));  // Atualizando no Redux
+    Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+  };
+  
+  const handleDeactivateUser = async (password: string) => {
+    // Tenta autenticar o usuário antes de desativar
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: user?.email!,
+      password,
+    });
+  
+    if (error || !data.user) {
+      Alert.alert("Erro", "Senha incorreta");
+      return;
+    }
+  
+    // Desativa a conta do usuário (status = 0)
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ status: 0 })
+      .eq("user_id", data.user.id);
+  
+    if (updateError) {
+      Alert.alert("Erro", "Erro ao desativar conta.");
+      return;
+    }
+  
+    // Deleta todas as tarefas associadas ao usuário
+    const { error: deleteTasksError } = await supabase
+      .from("tasks")
+      .delete()
+      .eq("user_id", user.id);
+  
+    if (deleteTasksError) {
+      Alert.alert("Erro", "Erro ao excluir tarefas do usuário.");
+      console.log('deleteTasksError: ', deleteTasksError)
+      return;
+    }
+  
+    (navigation as any).navigate("Introduction");
+    Alert.alert("Sucesso", "Conta desativada e tarefas apagadas!");
+  };
+
+  const confirmAction = async (password: string, setLoading: (loading: boolean) => void) => {
+    try {
+      if (modalAction === 'delete') {
+        await handleDeactivateUser(password);
+      } else {
+        await handleSaveChanges(password);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+      setIsModalVisible(false);
+    }
   };
 
   return (
-    <View className="flex-1 bg-white">
-
+    <View className="flex-1">
+      <ScrollView className="flex-1 bg-white">
         <Text className="text-3xl font-medium mt-8 mx-3 mb-4">Configurações</Text>
+
         <View className="flex items-center py-4">
-          <Image source={require("../assets/images/userIcon.png")} className="h-48 w-48 rounded-full" />
+          <Image 
+            source={require("../assets/images/userIcon.png")} 
+            className="h-48 w-48 rounded-full border-4 border-blue-500" 
+          />
         </View>
 
-        {/* Inputs */}
         <View className="p-6">
-          {/* Input - Nome */}
-          <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
+          <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
             <UserRound size={22} color="#8B8787" />
             <TextInput
               placeholder="Nome"
@@ -39,8 +150,7 @@ export default function Settings() {
             />
           </View>
 
-          {/* Input - Email */}
-          <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
+          <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
             <AtSign size={22} color="#8B8787" />
             <TextInput
               placeholder="Email"
@@ -54,15 +164,41 @@ export default function Settings() {
           </View>
         </View>
 
-        <View className="p-4 mt-auto">
+        <View className="px-6 mt-8">
           <TouchableOpacity 
-            onPress={saveChanges} 
+            onPress={() => { setModalAction('save'); setIsModalVisible(true); }}
             disabled={!isChanged}
             className={`${isChanged ? 'opacity-100' : 'opacity-70'} flex flex-row items-center justify-center w-full bg-blue-500 py-4 rounded-lg shadow-xl`}
           >
             <Text className="text-xl text-white font-semibold">Salvar Alterações</Text>
           </TouchableOpacity>
         </View>
+
+        <View className="mt-8 border-t-2 border-neutral-400 pt-4 px-1">
+          <TouchableOpacity 
+            onPress={handleLogout}
+            className="flex flex-row items-center justify-center w-full bg-white py-8 rounded-xl border-t-0 border border-neutral-400"
+          >
+            <LogOut size={22} color="black" />
+            <Text className="text-xl text-black font-semibold ml-4">Sair da Conta</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={handleDeleteAccount}
+            className="flex flex-row items-center justify-center w-full bg-white py-8 rounded-xl border-t-0 border mt-1 border-neutral-400"
+          >
+            <Trash size={22} color="red" />
+            <Text className="text-xl text-red-600 font-semibold ml-4">Excluir Conta</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <ConfirmActionModal 
+        visible={isModalVisible} 
+        onCancel={() => setIsModalVisible(false)} 
+        onConfirm={confirmAction} 
+        action={modalAction} 
+      />
 
       <Menu />
     </View>

@@ -20,34 +20,34 @@ export default function Login() {
       email,
       password,
     });
-
+  
     if (error || !data?.user) {
       Alert.alert("Erro", "Erro ao fazer login: " + (error?.message || "Usuário não encontrado"));
       return;
     }
-
+  
     console.log("Login bem-sucedido:", data.user);
-
+  
     // Buscar os dados do usuário na tabela 'users'
     const { data: userData, error: userError } = await supabase
       .from("users")
-      .select("id, name, email")
+      .select("id, name, email, status")
       .eq("user_id", data.user.id)
       .single();
-
-    if (userError || !userData) {
-      Alert.alert("Erro", "Erro ao buscar informações do usuário.");
+  
+    if (userError || !userData || userData.status === 0) {
+      Alert.alert("Erro", "Usuário não encontrado");
       return;
     }
-
+  
     console.log("Usuário carregado:", userData);
-
+  
     // Salva usuário no Redux
     dispatch(setUser(userData));
-
+  
     // Redirecionar para Home
     (navigation as any).navigate("Home");
-  };
+  };  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
