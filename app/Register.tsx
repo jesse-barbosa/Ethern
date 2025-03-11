@@ -2,7 +2,7 @@ import { supabase } from "../services/supabase";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft, UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
 
@@ -23,7 +23,7 @@ export default function Register() {
     });
 
     if (error || !data?.user) {
-      alert(`Erro ao criar usuário: ${error?.message || "Usuário não encontrado"}`);
+      Alert.alert("Erro", `Erro ao criar usuário: ${error?.message || "Usuário não encontrado"}`);
       return;
     }
 
@@ -40,7 +40,7 @@ export default function Register() {
 
     if (insertError) {
       console.error("Erro ao inserir dados adicionais:", insertError.message);
-      alert(`Erro ao inserir dados adicionais: ${insertError.message}`);
+      Alert.alert("Erro", `Erro ao inserir dados adicionais: ${insertError.message}`);
 
       // Rollback: excluir o usuário da autenticação
       await supabase.auth.admin.deleteUser(data.user.id);
@@ -57,7 +57,7 @@ export default function Register() {
       .single();
 
     if (userError || !userData) {
-      alert("Erro ao buscar informações do usuário.");
+      Alert.alert("Erro", "Erro ao buscar informações do usuário.");
       return;
     }
 

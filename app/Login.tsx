@@ -2,7 +2,7 @@ import { supabase } from "../services/supabase";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
 
@@ -22,7 +22,7 @@ export default function Login() {
     });
 
     if (error || !data?.user) {
-      alert("Erro ao fazer login: " + (error?.message || "Usuário não encontrado"));
+      Alert.alert("Erro", "Erro ao fazer login: " + (error?.message || "Usuário não encontrado"));
       return;
     }
 
@@ -36,7 +36,7 @@ export default function Login() {
       .single();
 
     if (userError || !userData) {
-      alert("Erro ao buscar informações do usuário.");
+      Alert.alert("Erro", "Erro ao buscar informações do usuário.");
       return;
     }
 
