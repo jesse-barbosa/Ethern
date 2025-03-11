@@ -13,6 +13,9 @@ web-build/
 #.env
 .env
 
+# eas
+eas.json
+
 ios
 android
 
