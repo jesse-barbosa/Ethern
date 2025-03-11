@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { ArrowBigRightDash } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Introduction() {
+  const user = useSelector((state: RootState) => state.user);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (user.id !== 0) { // Verificando se o usuário está autenticado
+      (navigation as any).navigate('Home'); // Se estiver logado, redireciona para a Home
+    }
+  }, [user, navigation]);
 
   return (
     <View className="flex-1 bg-white">

@@ -3,7 +3,7 @@ import 'react-native-url-polyfill/auto';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
-import store from './store';
+import { store } from 'store';
 import { StatusBar } from 'expo-status-bar';
 import './global.css';
 

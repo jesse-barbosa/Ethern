@@ -7,6 +7,7 @@ import { UserRound, AtSign, LogOut, Trash } from "lucide-react-native";
 import Menu from "../components/Menu";
 import ConfirmActionModal from "../components/modals/ConfirmActionModal";
 import { logoutUser, setUser } from "../slices/userSlice";
+import { persistor } from '../store';
 import { useNavigation } from "@react-navigation/native";
 
 export default function Settings() {
@@ -22,6 +23,7 @@ export default function Settings() {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    persistor.purge();
     (navigation as any).navigate("Introduction");
   };
 
