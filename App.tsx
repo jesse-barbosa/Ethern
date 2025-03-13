@@ -1,20 +1,22 @@
 import React from 'react';
 import 'react-native-url-polyfill/auto';
+import { enableScreens } from 'react-native-screens';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
-import { store } from 'store';
+import { store } from './store';
 import { StatusBar } from 'expo-status-bar';
 import './global.css';
 
 // Screens
-import IntroductionScreen from 'app/Introduction';
-import RegisterScreen from 'app/Register';
-import LoginScreen from 'app/Login';
-import HomeScreen from 'app/Home';
-import SettingsScreen from 'app/Settings';
+import IntroductionScreen from './app/Introduction';
+import RegisterScreen from './app/Register';
+import LoginScreen from './app/Login';
+import HomeScreen from './app/Home';
+import SettingsScreen from './app/Settings';
 
 export default function App() {
+  enableScreens();
   const Stack = createStackNavigator();
 
   return (
