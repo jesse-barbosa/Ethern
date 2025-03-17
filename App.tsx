@@ -9,11 +9,11 @@ import { StatusBar } from 'expo-status-bar';
 import './global.css';
 
 // Screens
-import IntroductionScreen from './app/Introduction';
-import RegisterScreen from './app/Register';
-import LoginScreen from './app/Login';
-import HomeScreen from './app/Home';
-import SettingsScreen from './app/Settings';
+import IntroductionScreen from 'app/Introduction';
+import RegisterScreen from 'app/Register';
+import LoginScreen from 'app/Login';
+import HomeScreen from 'app/Home';
+import SettingsScreen from 'app/Settings';
 
 export default function App() {
   enableScreens();
