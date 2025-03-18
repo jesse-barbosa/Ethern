@@ -102,7 +102,7 @@ export default function Register() {
           onPress={() => (navigation as any).navigate("Introduction")}
           className="flex items-center justify-center rounded-full bg-blue-500 p-2"
         >
-          <MaterialIcons name="arrow-circle-left" size={32} color="#fff" />
+          <MaterialIcons name="chevron-left" size={32} color="#fff" />
         </TouchableOpacity>
 
         <Text className="font-extrabold text-4xl mr-12">Lumina</Text>
