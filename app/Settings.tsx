@@ -119,8 +119,8 @@ export default function Settings() {
       return;
     }
   
-    (navigation as any).navigate("Introduction");
-    Alert.alert("Sucesso", "Conta desativada e tarefas apagadas!");
+    Alert.alert("Conta desativada", "Suas tarefas foram apagadas e seu registro será permanentemente deletado dentro dos próximos meses.");
+    handleLogout()
   };
 
   const confirmAction = async (password: string, setLoading: (loading: boolean) => void) => {
