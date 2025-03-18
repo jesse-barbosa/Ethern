@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, TextInput } from 'react-native';
-import { X } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface TaskModalProps {
   visible: boolean;
@@ -47,8 +47,8 @@ export default function TaskModal({ visible, onCancel, action, onConfirm, editTi
         <View className="flex flex-row justify-between">
           <Text className="text-2xl font-semibold text-center">{action === "edit" ? "Atualizar Tarefa" : "Criar Tarefa"}</Text>
           <TouchableOpacity onPress={onCancel} className="">
-                <X size={32} color={'#000'} />
-            </TouchableOpacity>
+            <MaterialIcons name="close" size={32} color={'#000'} />
+          </TouchableOpacity>
         </View>
           {/* Inputs */}
           <View className="my-8">

@@ -2,7 +2,7 @@ import { supabase } from "../services/supabase";
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { CheckCheck, Square, SquareCheck, Trash2, Plus } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import Header from "../components/Header";
 import Menu from "../components/Menu";
 import TaskModal from '../components/modals/TaskModal';
@@ -133,7 +133,7 @@ export default function Home() {
           {tasks.length === 0 ? (
               <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
                 <View className="bg-green-100 p-2 rounded-full">
-                  <CheckCheck size={28} color={'#0AC600'} />
+                  <MaterialIcons name="checklist" size={28} color={'#0AC600'} />
                 </View>
                 <Text className="text-xl my-2">Tudo feito, parabéns!</Text>
             </View>
@@ -146,9 +146,9 @@ export default function Home() {
             >
               <TouchableOpacity onPress={() => changeStatus(task.id)}>
                 {task.status ? (
-                  <SquareCheck size={24} color={'#0AC600'} />
+                  <MaterialIcons name="check-box" size={24} color={'#0AC600'} />
                 ) : (
-                  <Square size={24} color={'#000'} />
+                  <MaterialIcons name="check-box-outline-blank" size={24} color={'#000'} />
                 )}
               </TouchableOpacity>
 
@@ -162,7 +162,7 @@ export default function Home() {
               </View>
 
               <TouchableOpacity onPress={() => handleDeletePress(task.id)} className="flex items-center justify-center rounded-full">
-                <Trash2 size={24} color={'#FF4646'} />
+                <MaterialIcons name="delete" size={24} color={'#FF4646'} />
               </TouchableOpacity>
             </TouchableOpacity>
           ))
@@ -170,7 +170,7 @@ export default function Home() {
         </View>
       </ScrollView>
       <TouchableOpacity onPress={() => handleCreatePress()} className="bg-blue-500 flex items-center justify-center absolute bottom-32 right-6 p-4 rounded-full shadow-lg">
-        <Plus size={36} color='#fff'/>
+        <MaterialIcons name="add" size={36} color='#fff'/>
       </TouchableOpacity>
       <Menu />
 

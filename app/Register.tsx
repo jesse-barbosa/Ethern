@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ChevronLeft, UserRound, AtSign, KeyRound, Eye, EyeOff, ArrowBigRightDash } from "lucide-react-native";
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -102,7 +102,7 @@ export default function Register() {
           onPress={() => (navigation as any).navigate("Introduction")}
           className="flex items-center justify-center rounded-full bg-blue-500 p-2"
         >
-          <ChevronLeft size={32} color="#fff" />
+          <MaterialIcons name="arrow-circle-left" size={32} color="#fff" />
         </TouchableOpacity>
 
         <Text className="font-extrabold text-4xl mr-12">Lumina</Text>
@@ -113,7 +113,7 @@ export default function Register() {
 
         {/* Input - Nome */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
-          <UserRound size={22} color="#8B8787" />
+          <MaterialIcons name="account-circle" size={22} color="#8B8787" />
           <TextInput
             placeholder="Nome"
             className="flex-1 text-md text-neutral-700 py-5"
@@ -124,7 +124,7 @@ export default function Register() {
 
         {/* Input - Email */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
-          <AtSign size={22} color="#8B8787" />
+          <MaterialIcons name="alternate-email" size={22} color="#8B8787" />
           <TextInput
             placeholder="Email"
             className="flex-1 text-md text-neutral-700 py-5"
@@ -135,7 +135,7 @@ export default function Register() {
 
         {/* Input - Password */}
         <View className="w-full max-w-md flex flex-row gap-3 mt-6 items-center border-neutral-500 border-b-2">
-          <KeyRound size={22} color="#8B8787" />
+          <MaterialIcons name="key" size={22} color="#8B8787" />
           <TextInput
             placeholder="Senha"
             secureTextEntry={!showPassword}
@@ -145,9 +145,9 @@ export default function Register() {
           />
           <TouchableOpacity onPress={togglePasswordVisibility} className="flex-shrink-0">
             {showPassword ? (
-              <EyeOff size={22} color="#8B8787" />
+              <MaterialIcons name="visibility" size={22} color="#8B8787" />
             ) : (
-              <Eye size={22} color="#8B8787" />
+              <MaterialIcons name="visibility-off" size={22} color="#8B8787" />
             )}
           </TouchableOpacity>
         </View>
@@ -160,7 +160,7 @@ export default function Register() {
         >
           <View />
           <Text className="text-xl text-white font-semibold">Registrar</Text>
-          <ArrowBigRightDash size={30} color="#fff" />
+          <MaterialIcons name="arrow-circle-right" size={30} color="#fff" />
         </TouchableOpacity>
         <View className="flex flex-row items-center justify-center">
           <Text className="text-neutral-600 text-center mt-4">Já tem uma conta?</Text>

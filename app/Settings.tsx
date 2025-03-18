@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ScrollView, View, Text, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
-import { UserRound, AtSign, LogOut, Trash } from "lucide-react-native";
+import { MaterialIcons } from '@expo/vector-icons';
 import Menu from "../components/Menu";
 import ConfirmActionModal from "../components/modals/ConfirmActionModal";
 import { logoutUser, setUser } from "../slices/userSlice";
@@ -152,7 +152,7 @@ export default function Settings() {
 
         <View className="p-6">
           <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
-            <UserRound size={22} color="#8B8787" />
+            <MaterialIcons name="account-circle" size={22} color="#8B8787" />
             <TextInput
               placeholder="Nome"
               className="flex-1 text-lg text-neutral-800 py-5"
@@ -165,7 +165,7 @@ export default function Settings() {
           </View>
 
           <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
-            <AtSign size={22} color="#8B8787" />
+            <MaterialIcons name="alternate-email" size={22} color="#8B8787" />
             <TextInput
               placeholder="Email"
               className="flex-1 text-lg text-neutral-800 py-5 opacity-90"
@@ -194,7 +194,7 @@ export default function Settings() {
             onPress={handleLogout}
             className="flex flex-row items-center justify-center w-full bg-neutral-200 py-7 rounded-xl border-t-0 border border-neutral-400"
           >
-            <LogOut size={22} color="black" />
+            <MaterialIcons name="logout" size={22} color="black" />
             <Text className="text-xl text-black font-semibold ml-4">Sair da Conta</Text>
           </TouchableOpacity>
 
@@ -202,7 +202,7 @@ export default function Settings() {
             onPress={handleDeleteAccount}
             className="flex flex-row items-center justify-center w-full bg-neutral-200 py-7 rounded-xl border-t-0 border mt-1 border-neutral-400"
           >
-            <Trash size={22} color="red" />
+            <MaterialIcons name="delete" size={22} color="red" />
             <Text className="text-xl text-red-600 font-semibold ml-4">Excluir Conta</Text>
           </TouchableOpacity>
         </View>

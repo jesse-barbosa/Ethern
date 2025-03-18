@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { ArrowBigRightDash } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Introduction() {
@@ -41,7 +41,7 @@ export default function Introduction() {
         >
           <View />
           <Text className="text-xl text-white font-semibold">Continuar</Text>
-          <ArrowBigRightDash size={30} color="#fff" />
+          <MaterialIcons name="arrow-circle-right" size={30} color="#fff" />
         </TouchableOpacity>
       </View>
       
