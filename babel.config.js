@@ -1,10 +1,31 @@
-module.exports = function (api) {
+module.exports = function(api) {
   api.cache(true);
-  const plugins = [];
-
   return {
-    presets: [['babel-preset-expo', { jsxImportSource: 'nativewind' }], 'nativewind/babel'],
-
-    plugins: [['module:react-native-dotenv']],
+    presets: [
+      ['babel-preset-expo', { jsxImportSource: 'nativewind' }], 
+      'nativewind/babel'
+    ],
+    plugins: [
+      [
+        'module-resolver',
+        {
+          root: ['.'],
+          extensions: [
+            '.js',
+            '.jsx',
+            '.ts',
+            '.tsx',
+            '.android.js',
+            '.android.tsx',
+            '.ios.js',
+            '.ios.tsx',
+          ],
+          alias: {
+            app: './app',
+          },
+        },
+      ],
+      ['module:react-native-dotenv']
+    ],
   };
 };
