@@ -23,7 +23,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "newArchEnabled": false
+      "newArchEnabled": false,
+      "bundleIdentifier": "com.jessebarbosa.Lumina"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,9 +32,10 @@
         "backgroundColor": "#ffffff"
       },
       "newArchEnabled": false,
-      "package": "com.jessebarbosa.Lumina"
+      "package": "com.jessebarbosa.Lumina",
+      "permissions": []
     },
-    "newArchEnabled": false,
+    "jsEngine": "hermes",
     "extra": {
       "eas": {
         "projectId": "323268ff-e992-47db-b7f4-66ea77d86fe8"
