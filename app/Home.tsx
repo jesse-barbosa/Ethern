@@ -130,10 +130,6 @@ export default function Home() {
         <Header />
         <Text className="text-3xl text-center my-5">Minhas Tarefas</Text>
         <View className="px-3 gap-2">
-        <TouchableOpacity onPress={() => handleCreatePress()} className="flex flex-row bg-blue-500 items-center justify-center p-4 rounded-lg gap-2">
-          <MaterialIcons name="add" size={36} color='#fff'/>
-          <Text className="text-white text-xl font-medium">Adicionar Nova Tarefa</Text>
-        </TouchableOpacity>
           {tasks.length === 0 ? (
               <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
                 <View className="bg-green-100 p-2 rounded-full">
@@ -173,8 +169,8 @@ export default function Home() {
           )}
         </View>
       </ScrollView>
-      <TouchableOpacity className="bg-blue-500 flex items-center justify-center absolute bottom-24 right-6 p-4 rounded-full shadow-lg">
-        <MaterialIcons name="mic" size={36} color='#fff'/>
+      <TouchableOpacity onPress={() => handleCreatePress()} className="bg-blue-500 flex items-center justify-center absolute bottom-24 right-6 p-4 rounded-full shadow-lg">
+        <MaterialIcons name="add" size={36} color='#fff'/>
       </TouchableOpacity>
       <Menu />
 
