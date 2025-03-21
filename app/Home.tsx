@@ -173,9 +173,9 @@ export default function Home() {
           )}
         </View>
       </ScrollView>
-      {/* <TouchableOpacity onPress={() => handleCreatePress()} className="bg-blue-500 flex items-center justify-center absolute bottom-24 right-6 p-4 rounded-full shadow-lg">
-        <MaterialIcons name="add" size={36} color='#fff'/>
-      </TouchableOpacity> */}
+      <TouchableOpacity className="bg-blue-500 flex items-center justify-center absolute bottom-24 right-6 p-4 rounded-full shadow-lg">
+        <MaterialIcons name="mic" size={36} color='#fff'/>
+      </TouchableOpacity>
       <Menu />
 
       {/* Modals */}
