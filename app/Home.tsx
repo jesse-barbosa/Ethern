@@ -130,13 +130,13 @@ export default function Home() {
   
   return (
     <View className="flex-1">
-      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-300 py-8 px-6 h-64 rounded-b-3xl">
+      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
         <View className="flex flex-col">
           <Text className="text-4xl text-white font-semibold">Bem-vindo :)</Text>
           <Text className="text-xl text-neutral-100 font-light">Tenha um bom dia, {getFirstName(user.name)}!</Text>
         </View>
       </View>
-      <ScrollView style={{ paddingTop: 120 }}>
+      <ScrollView style={{ paddingTop: 110 }}>
       <Text className="text-4xl text-white text-center my-5 font-medium"
           style={{
             textShadowColor: 'rgba(0, 0, 0, 0.2)', // Shadow with transparency

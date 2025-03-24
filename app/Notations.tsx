@@ -55,7 +55,7 @@ export default function Notations() {
 
   return (
     <View className="flex-1">
-      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-300 py-8 px-6 h-64 rounded-b-3xl">
+      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
         <View className="flex flex-col">
           <View className="flex flex-row w-full justify-between items-center">
             <Text className="text-4xl text-white font-semibold">Anotações</Text>

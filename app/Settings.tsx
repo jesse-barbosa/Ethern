@@ -140,7 +140,7 @@ export default function Settings() {
 
   return (
     <View className="flex-1">
-      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-300 py-8 px-6 h-64 rounded-b-3xl">
+      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
         <View className="flex flex-col">
           <Text className="text-4xl text-white font-semibold">Configurações</Text>
           <Text className="text-xl w-3/5 text-neutral-100 font-light">Personalize e gerencie os dados de sua conta Lumina</Text>
