@@ -85,7 +85,7 @@ export default function Notations() {
             <TouchableOpacity
             onPress={() => handleNotationPress(notation.id)}
               key={index}
-              className="bg-white flex flex-row items-center w-full p-6 rounded-xl shadow-lg"
+              className="bg-white flex flex-row items-center w-full p-6 rounded-xl shadow-lg border-s-4 border-blue-500"
             >
               <Text className="w-11/12 text-xl mb-1">{notation.title}</Text>
               <MaterialIcons className="ms-3" name="chevron-right" size={24} color={'#000'} />
