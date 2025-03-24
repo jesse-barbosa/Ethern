@@ -73,11 +73,12 @@ export default function Notations() {
           }}>Minhas Anotações</Text>
         <View className="px-3 gap-2">
           {notations.length === 0 ? (
-              <View className=" bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
-                <View className="bg-green-100 p-2 rounded-full">
-                  <MaterialIcons name="checklist" size={28} color={'#0AC600'} />
-                </View>
-                <Text className="text-xl my-2">Tudo feito, parabéns!</Text>
+            <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
+              <View className="bg-blue-100 p-2 rounded-full">
+                <MaterialIcons name="note-add" size={28} color={'#007BFF'} />
+              </View>
+              <Text className="text-xl my-2">Nenhuma anotação encontrada.</Text>
+              <Text className="text-neutral-500 text-center">Crie uma nova anotação para começar!</Text>
             </View>
             ) : (
             notations.map((notation, index) => (
