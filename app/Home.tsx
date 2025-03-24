@@ -1,6 +1,7 @@
 import { supabase } from "../services/supabase";
 import { View, Text, TouchableOpacity } from 'react-native';
 import DraggableFlatList from "react-native-draggable-flatlist";
+import { ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -8,7 +9,6 @@ import Menu from "../components/Menu";
 import TaskModal from '../components/modals/TaskModal';
 import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
 import { useState, useEffect } from 'react';
-import { ScrollView } from "react-native-gesture-handler";
 
 interface Task {
   id: number;
@@ -25,6 +25,8 @@ export default function Home() {
   const [selectedEditTaskId, setSelectedEditTaskId] = useState<number | null>(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedDeleteTaskId, setSelectedDeleteTaskId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -32,22 +34,26 @@ export default function Home() {
 
   // Fetch tasks from Supabase
   const fetchTasks = async () => {
+    setLoading(true);
     const { data: fetchedTasks, error }: { data: Task[] | null; error: any } = await supabase
       .from('tasks')
       .select('id, title, message, status')
       .eq('user_id', user.id)
       .order('position', { ascending: true });
-
+  
     if (error) {
       console.error('Error fetching tasks:', error);
     } else {
       setTasks(fetchedTasks ? fetchedTasks.sort((a, b) => Number(a.status) - Number(b.status)) : []);
     }
+    setLoading(false);
   };
+  
 
   const updateTaskPositions = async (newTasks: Task[]) => {
+    setDragging(true);
     setTasks(newTasks);
-    // Atualiza cada tarefa individualmente usando o método update
+  
     const updatePromises = newTasks.map((task: Task, index: number) => 
       supabase
         .from('tasks')
@@ -60,7 +66,9 @@ export default function Home() {
     results.forEach(({ error }) => {
       if (error) console.error('Error updating positions:', error);
     });
-  };  
+  
+    setDragging(false);
+  };
 
   const handleDragEnd = ({ data }: { data: Task[] }) => {
     updateTaskPositions(data);
@@ -150,7 +158,16 @@ export default function Home() {
           Minhas Tarefas
         </Text>
 
-        {tasks.length === 0 ? (
+        {loading ? (
+          <View className="flex-1 items-center justify-center w-full p-6 my-6">
+            <View className="flex flex-row items-center px-6 py-4 rounded-lg">
+              <ActivityIndicator size="large" color="#3B82F6" />
+              <Text className="text-xl font-semibold text-neutral-800 ml-4 animate-pulse">
+                Carregando tarefas...
+              </Text>
+            </View>
+          </View>
+        ) : tasks.length === 0 ? (
           <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
             <View className="bg-green-100 p-2 rounded-full">
               <MaterialIcons name="check-circle" size={28} color={'#4CAF50'} />
@@ -160,7 +177,12 @@ export default function Home() {
               Você concluiu todas as tarefas. Aproveite seu tempo com eficiência!
             </Text>
           </View>
-        ) : (
+        ) : dragging ? (
+            <View className="flex-1 flex flex-row items-center justify-center w-full p-2">
+              <ActivityIndicator size="small" color="#3B82F6" />
+              <Text className="text-neutral-500 ml-2">Atualizando posições...</Text>
+            </View>
+          ) : (
           <DraggableFlatList
             className="px-2"
             data={tasks}
