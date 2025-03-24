@@ -136,7 +136,7 @@ export default function Home() {
           <Text className="text-xl text-neutral-100 font-light">Tenha um bom dia, {getFirstName(user.name)}!</Text>
         </View>
       </View>
-      <ScrollView style={{ paddingTop: 110 }}>
+      <ScrollView style={{ paddingTop: 100 }}>
       <Text className="text-4xl text-white text-center my-5 font-medium"
           style={{
             textShadowColor: 'rgba(0, 0, 0, 0.2)', // Shadow with transparency
