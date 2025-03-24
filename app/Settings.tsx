@@ -140,17 +140,21 @@ export default function Settings() {
 
   return (
     <View className="flex-1">
-      <ScrollView className="flex-1">
-        <Text className="text-3xl font-medium mt-8 mx-3 mb-4">Configurações</Text>
-
-        <View className="flex items-center py-4">
+      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-300 py-8 px-6 h-64 rounded-b-3xl">
+        <View className="flex flex-col">
+          <Text className="text-4xl text-white font-semibold">Configurações</Text>
+          <Text className="text-xl w-3/5 text-neutral-100 font-light">Personalize e gerencie os dados de sua conta Lumina</Text>
+        </View>
+      </View>
+      <ScrollView style={{ paddingTop: 130 }}>
+        <View className="flex items-center">
           <Image 
             source={require("../assets/images/userIcon.png")} 
             className="h-48 w-48 rounded-full border-4 border-blue-500" 
           />
         </View>
 
-        <View className="p-6">
+        <View className="px-6 py-2">
           <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
             <MaterialIcons name="account-circle" size={22} color="#8B8787" />
             <TextInput
@@ -189,10 +193,10 @@ export default function Settings() {
           </TouchableOpacity>
         </View>
 
-        <View className="mt-8 border-t-2 border-neutral-400 pt-4 px-1">
+        <View className="mt-8 border-t-2 border-neutral-400 pt-4 px-2">
           <TouchableOpacity 
             onPress={handleLogout}
-            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-7 rounded-xl border-t-0 border border-neutral-400"
+            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-8 rounded-xl border-t-0 border border-neutral-400"
           >
             <MaterialIcons name="logout" size={22} color="black" />
             <Text className="text-xl text-black font-semibold ml-4">Sair da Conta</Text>
@@ -200,7 +204,7 @@ export default function Settings() {
 
           <TouchableOpacity 
             onPress={handleDeleteAccount}
-            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-7 rounded-xl border-t-0 border mt-1 border-neutral-400"
+            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-8 rounded-xl border-t-0 border mt-1 border-neutral-400"
           >
             <MaterialIcons name="delete" size={22} color="red" />
             <Text className="text-xl text-red-600 font-semibold ml-4">Excluir Conta</Text>

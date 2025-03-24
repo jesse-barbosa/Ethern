@@ -3,7 +3,6 @@ import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { MaterialIcons } from '@expo/vector-icons';
-import Header from "../components/Header";
 import Menu from "../components/Menu";
 import TaskModal from '../components/modals/TaskModal';
 import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
@@ -123,12 +122,27 @@ export default function Home() {
       setIsDeleteModalVisible(false);
     }
   };
+
+  const getFirstName = (name: string) => {
+    const parts = name.split(' ');
+    return parts[0];
+  }
   
   return (
-    <View className="flex-1 ">
-      <ScrollView>
-        <Header />
-        <Text className="text-3xl text-center my-5">Minhas Tarefas</Text>
+    <View className="flex-1">
+      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-300 py-8 px-6 h-64 rounded-b-3xl">
+        <View className="flex flex-col">
+          <Text className="text-4xl text-white font-semibold">Bem-vindo :)</Text>
+          <Text className="text-xl text-neutral-100 font-light">Tenha um bom dia, {getFirstName(user.name)}!</Text>
+        </View>
+      </View>
+      <ScrollView style={{ paddingTop: 120 }}>
+      <Text className="text-4xl text-white text-center my-5 font-medium"
+          style={{
+            textShadowColor: 'rgba(0, 0, 0, 0.2)', // Shadow with transparency
+            textShadowOffset: { width: 2, height: 2 },
+            textShadowRadius: 4,
+          }}>Minhas Tarefas</Text>
         <View className="px-3 gap-2">
           {tasks.length === 0 ? (
               <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">

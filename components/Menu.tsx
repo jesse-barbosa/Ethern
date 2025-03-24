@@ -6,16 +6,20 @@ export default function Menu() {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const screens = [
+    { name: 'Home', icon: 'list-alt' as const, title: 'Tarefas'},
+    { name: 'Notations', icon: 'sticky-note-2' as const, title: 'Anotações'},
+    { name: 'Settings', icon: 'settings' as const, title: 'Configs'}
+  ]
+
   return (
       <View className="w-full flex flex-row items-center justify-around bg-blue-500 py-2 mt-2">
-        <TouchableOpacity onPress={() => (navigation as any).navigate("Home")} className={`${route.name === "Home" ? 'bg-blue-600' : ''} flex items-center rounded-lg p-1`}>
-            <MaterialIcons name="list-alt" size={28} color='#fff' />
-            <Text className="text-md text-white">Tarefas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => (navigation as any).navigate("Settings")} className={`${route.name === "Settings" ? 'bg-blue-600' : ''} flex items-center rounded-lg p-1`}>
-            <MaterialIcons name="settings" size={28} color='#fff' />
-            <Text className="text-md text-white">Configs</Text>
-        </TouchableOpacity>
+        {screens.map((screen, index) => (
+          <TouchableOpacity key={screen.name} onPress={() => (navigation as any).navigate(screen.name)} className="flex items-center rounded-lg p-1">
+              <MaterialIcons name={screen.icon} size={28} color={route.name === screen.name? '#fff' : '#d4d4d4'} />
+              <Text className={`text-md ${route.name === screen.name? 'text-white' : 'text-neutral-300'}`}>{screen.title}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
   );
 }
