@@ -140,14 +140,15 @@ export default function Settings() {
 
   return (
     <View className="flex-1">
-      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
-        <View className="flex flex-col">
-          <Text className="text-4xl text-white font-semibold">Configurações</Text>
-          <Text className="text-xl w-3/5 text-neutral-100 font-light">Personalize e gerencie os dados de sua conta Lumina</Text>
+      <ScrollView className="flex-1">
+        <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
+          <View className="flex flex-col">
+            <Text className="text-4xl text-white font-semibold">Configurações</Text>
+            <Text className="text-xl w-3/5 text-neutral-100 font-light">Personalize e gerencie os dados de sua conta Lumina</Text>
+          </View>
         </View>
-      </View>
-      <ScrollView style={{ paddingTop: 130 }}>
-        <View className="flex items-center">
+
+        <View className="flex items-center mt-36">
           <Image 
             source={require("../assets/images/userIcon.png")} 
             className="h-48 w-48 rounded-full border-4 border-blue-500" 
@@ -212,14 +213,14 @@ export default function Settings() {
         </View>
       </ScrollView>
 
+      <Menu />
+
       <ConfirmActionModal 
         visible={isModalVisible} 
         onCancel={() => setIsModalVisible(false)} 
         onConfirm={confirmAction} 
         action={modalAction} 
       />
-
-      <Menu />
     </View>
   );
 }
