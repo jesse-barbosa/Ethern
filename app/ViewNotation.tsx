@@ -1,9 +1,9 @@
 import { supabase } from "../services/supabase";
-import { ScrollView, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons';
 import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 
 // Define expected params for this screen
@@ -19,10 +19,39 @@ export default function Notations() {
   const [editedTitle, setEditedTitle] = useState("");
   const [editedMessage, setEditedMessage] = useState("");
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [lineCount, setLineCount] = useState(20);
+  const textRef = useRef<TextInput>(null);
 
   useEffect(() => {
     fetchNotationData();
   }, [id]);
+
+  // Função para calcular linhas dinamicamente
+  const calculateLines = () => {
+    const screenHeight = Dimensions.get('window').height;
+    const lineHeight = 28; // Altura da linha de texto
+    const maxLines = Math.ceil(screenHeight / lineHeight);
+    
+    // Calcula linhas baseado no texto
+    if (notation?.message) {
+      // Estima o número de linhas baseado no texto
+      const estimatedLines = Math.ceil(notation.message.length / 40); // 40 caracteres por linha como estimativa
+      const dynamicLineCount = Math.max(maxLines, estimatedLines);
+      
+      setLineCount(dynamicLineCount);
+    }
+  };
+
+  useEffect(() => {
+    if (notation) {
+      calculateLines();
+    }
+    
+    // Recalcula ao rotacionar a tela
+    const subscription = Dimensions.addEventListener('change', calculateLines);
+    
+    return () => subscription.remove();
+  }, [notation]);
 
   const fetchNotationData = async () => {
     const { data, error } = await supabase
@@ -30,7 +59,7 @@ export default function Notations() {
       .select('id, title, message, updated_at')
       .eq('id', id)
       .single();
-    
+  
     if (error) {
       console.error('Error fetching notation data:', error);
     } else {
@@ -38,7 +67,7 @@ export default function Notations() {
       setEditedTitle(data.title);
       setEditedMessage(data.message);
     }
-  };
+  };  
 
   const saveChanges = async () => {
     if (!notation) return;
@@ -83,6 +112,21 @@ export default function Notations() {
     const minutes = String(inputDate.getMinutes()).padStart(2, '0');
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
+
+  // Notebook line background component
+  const NotebookBackground = () => {
+    const lines = Array.from({ length: lineCount }, (_, index) => (
+      <View 
+        key={index} 
+        style={[
+          styles.line, 
+          { top: index * 28 } // Espaçamento entre linhas equivalente à altura da linha de texto
+        ]} 
+      />
+    ));
+
+    return <View style={styles.notebookLines}>{lines}</View>;
+  };
 
   return (
     <View className="flex-1">
@@ -138,18 +182,30 @@ export default function Notations() {
         </View>
       </View>
 
-      <ScrollView className="flex-1 p-2">
-        {isEditing ? (
-          <TextInput
-            className="text-xl flex-1"
-            value={editedMessage}
-            onChangeText={setEditedMessage}
-            multiline
-            autoFocus
-          />
-        ) : (
-          <Text className="text-xl">{notation?.message || ""}</Text>
-        )}
+      <ScrollView className="flex-1 bg-white">
+        <View className="flex-1 px-2" style={styles.notebookWrapper}>
+          <NotebookBackground />
+          {isEditing ? (
+            <TextInput
+              ref={textRef}
+              style={styles.textInput}
+              value={editedMessage}
+              onChangeText={(text) => {
+                setEditedMessage(text);
+                calculateLines();
+              }}
+              multiline
+              autoFocus
+            />
+          ) : (
+            <Text 
+              ref={textRef}
+              style={styles.textInput}
+            >
+              {notation?.message || ""}
+            </Text>
+          )}
+        </View>
       </ScrollView>
 
       <View className="bg-neutral-300 flex flex-row w-full justify-between items-center p-1">
@@ -170,3 +226,36 @@ export default function Notations() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  notebookWrapper: {
+    backgroundColor: '#fff',
+    position: 'relative',
+    minHeight: Dimensions.get('window').height * 0.6, // Altura mínima
+  },
+  notebookLines: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  textInput: {
+    fontSize: 18,
+    lineHeight: 28,
+    color: '#333',
+    textAlignVertical: 'top',
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: 'transparent',
+    zIndex: 10,
+  },
+  line: {
+    position: 'absolute',
+    width: '100%',
+    height: 1,
+    backgroundColor: '#f7f7f7',
+    left: 15,
+    right: 15,
+  },
+});
