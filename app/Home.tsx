@@ -138,17 +138,24 @@ export default function Home() {
     const parts = name.split(' ');
     return parts[0];
   }
+
+  const getMessage = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Tenha um bom dia,';
+    if (hour >= 12 && hour < 18) return 'Aproveite sua tarde,';
+    if (hour >= 18) return 'Tenha um bom descanso\n Boa noite,';
+  }
   
   return (
     <View className="flex-1">
       <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
         <View className="flex flex-col">
           <Text className="text-4xl text-white font-semibold">Bem-vindo :)</Text>
-          <Text className="text-xl text-neutral-100 font-light">Tenha um bom dia, {getFirstName(user.name)}!</Text>
+          <Text className="text-xl text-neutral-100 font-light">{getMessage()} {getFirstName(user.name)}!</Text>
         </View>
       </View>
 
-      <View className="flex-1 mt-32 pb-20">
+      <View className="flex-1 mt-36 pb-20">
         <Text className="text-4xl text-white text-center my-5 font-medium"
           style={{
             textShadowColor: 'rgba(0, 0, 0, 0.2)',
