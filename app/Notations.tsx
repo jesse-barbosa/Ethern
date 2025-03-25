@@ -59,7 +59,6 @@ export default function Notations() {
         <View className="flex flex-col">
           <View className="flex flex-row w-full justify-between items-center">
             <Text className="text-4xl text-white font-semibold">Anotações</Text>
-            <MaterialIcons name="search" size={32} color={'#fff'} />
           </View>
           <Text className="text-xl text-neutral-100 font-light">Escreva sobre sobre o seu dia ou salve informações importantes</Text>
         </View>
