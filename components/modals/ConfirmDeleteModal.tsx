@@ -15,8 +15,8 @@ export default function ConfirmDeleteModal({ visible, onCancel, onConfirm }: Con
     >
       <View className="flex-1 justify-center items-center bg-black/50">
         <View className="bg-white p-6 rounded-xl shadow-lg w-5/6">
-          <Text className="text-2xl font-semibold text-center mt-2 mb-4">Tem certeza que deseja excluir esta tarefa?</Text>
-          <Text className="text-md text-center text-neutral-500 mb-6">Não é possível restaurar uma tarefa após sua exclusão.</Text>
+          <Text className="text-2xl font-semibold text-center mt-2 mb-4">Tem certeza que deseja excluir este item?</Text>
+          <Text className="text-md text-center text-neutral-500 mb-6">Não é possível restaurar o item após sua exclusão.</Text>
           <View className="flex-row justify-between">
             <View className="w-1/2 pe-2">
               <TouchableOpacity onPress={onCancel} className="bg-neutral-300 w-full px-4 py-3 rounded-lg">
