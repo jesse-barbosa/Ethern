@@ -44,7 +44,7 @@ export default function Notations() {
       fetchNotations();
     }
   };
-  
+
   const handleNotationPress = (id: number) => {
     (navigation as any).navigate('ViewNotation', { id });
   };
@@ -55,18 +55,18 @@ export default function Notations() {
 
   return (
     <View className="flex-1">
+      <ScrollView style={{ flex: 1 }}>
       <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
         <View className="flex flex-col">
           <View className="flex flex-row w-full justify-between items-center">
             <Text className="text-4xl text-white font-semibold">Anotações</Text>
           </View>
-          <Text className="text-xl text-neutral-100 font-light">Escreva sobre sobre o seu dia ou salve informações importantes</Text>
+          <Text className="text-xl text-neutral-100 font-light">Escreva sobre o seu dia ou salve informações importantes</Text>
         </View>
       </View>
-      <ScrollView style={{ paddingTop: 130 }}>
-        <Text className="text-4xl text-white text-center my-5 font-medium"
+        <Text className="mt-44 text-4xl text-white text-center my-5 font-medium"
           style={{
-            textShadowColor: 'rgba(0, 0, 0, 0.2)', // Shadow with transparency
+            textShadowColor: 'rgba(0, 0, 0, 0.2)',
             textShadowOffset: { width: 2, height: 2 },
             textShadowRadius: 4,
           }}>Minhas Anotações</Text>
@@ -97,7 +97,6 @@ export default function Notations() {
         <MaterialIcons name="add" size={36} color='#fff'/>
       </TouchableOpacity>
       <Menu />
-
     </View>
   );
 }

@@ -148,7 +148,7 @@ export default function Home() {
         </View>
       </View>
 
-      <View className="flex-1 pb-20" style={{ paddingTop: 100 }}>
+      <View className="flex-1 mt-32 pb-20">
         <Text className="text-4xl text-white text-center my-5 font-medium"
           style={{
             textShadowColor: 'rgba(0, 0, 0, 0.2)',
