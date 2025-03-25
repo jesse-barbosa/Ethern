@@ -211,6 +211,9 @@ export default function Settings() {
             <Text className="text-xl text-red-600 font-semibold ml-4">Excluir Conta</Text>
           </TouchableOpacity>
         </View>
+        <View className="mt-12 mb-8">
+            <Text className="text-xl text-neutral-500 text-center">Ver 1.1.0</Text>
+        </View>
       </ScrollView>
 
       <Menu />
