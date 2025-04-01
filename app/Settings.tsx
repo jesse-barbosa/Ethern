@@ -212,7 +212,7 @@ export default function Settings() {
           </TouchableOpacity>
         </View>
         <View className="mt-12 mb-8">
-            <Text className="text-xl text-neutral-500 text-center">Ver 1.1.0</Text>
+            <Text className="text-xl text-neutral-500 text-center">Ver 1.1.01</Text>
         </View>
       </ScrollView>
 
