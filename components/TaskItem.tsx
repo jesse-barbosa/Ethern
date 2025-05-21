@@ -28,6 +28,16 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onLongPress,
   onPress
 }) => {
+  // Check if task is overdue
+  const isOverdue = () => {
+    if (!date || completed) return false
+    const taskDate = new Date(date)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    taskDate.setHours(0, 0, 0, 0)
+    return taskDate < today
+  }
+
   return (
     <Pressable
     onPress={onPress}
@@ -45,7 +55,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           <Text style={[styles.text, completed && styles.completedText]} numberOfLines={2}>
             {text}
           </Text>
-          <Text style={styles.taskDate}>
+          <Text style={[styles.taskDate, isOverdue() && styles.overdueDate]}>
             {date && !isNaN(new Date(date).getTime()) ? format(new Date(date), 'dd/MM/yyyy') : "Data inválida"}
           </Text>
         </View>
@@ -91,7 +101,13 @@ const styles = StyleSheet.create({
   taskDate: {
     fontSize: 12,
     color: "#777",
-    marginTop: 4,
+    marginTop: 6,
+  },
+  overdueDate: {
+    fontSize: 12,
+    color: "#FF5252",
+    fontWeight: "700",
+    marginTop: 6,
   },
   deleteButton: {
     marginLeft: 12,
