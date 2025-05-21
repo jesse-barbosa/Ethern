@@ -1,43 +1,42 @@
+"use client"
+
+import type React from "react"
+import { useState, useEffect } from "react"
 import { supabase } from "../services/supabase";
-import { View, Text, TouchableOpacity } from 'react-native';
-import DraggableFlatList from "react-native-draggable-flatlist";
-import { ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { MaterialIcons } from '@expo/vector-icons';
-import Menu from "../components/Menu";
-import TaskModal from '../components/modals/TaskModal';
-import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
-import { useState, useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Text } from "react-native"
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
+import type { Task } from "../@types/tasks"
+import Header from "../components/Header"
+import Menu from "../components/Menu"
+import TaskItem from "../components/TaskItem"
+import TaskModal from "../components/modals/TaskModal"
+import { CheckCheck, Plus } from "lucide-react-native"
 
-interface Task {
-  id: number;
-  title: string;
-  message: string;
-  status: boolean;
-}
-
-export default function Home() {
+const TasksScreen: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [action, setAction] = useState<'create' | 'edit'>('create');
-  const [selectedEditTaskId, setSelectedEditTaskId] = useState<number | null>(null);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [selectedDeleteTaskId, setSelectedDeleteTaskId] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(false)
+  
   const [loading, setLoading] = useState(true);
   const [dragging, setDragging] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const [action, setAction] = useState<'add' | 'edit'>('add');
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+
+  const ITEM_HEIGHT = 50;
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // Fetch tasks from Supabase
   const fetchTasks = async () => {
     setLoading(true);
     const { data: fetchedTasks, error }: { data: Task[] | null; error: any } = await supabase
       .from('tasks')
-      .select('id, title, message, status')
+      .select('id, title, message, status, do_at, created_at')
       .eq('user_id', user.id)
       .order('position', { ascending: true });
   
@@ -48,7 +47,6 @@ export default function Home() {
     }
     setLoading(false);
   };
-  
 
   const updateTaskPositions = async (newTasks: Task[]) => {
     setDragging(true);
@@ -70,11 +68,7 @@ export default function Home() {
     setDragging(false);
   };
 
-  const handleDragEnd = ({ data }: { data: Task[] }) => {
-    updateTaskPositions(data);
-  };
-
-  const changeStatus = async (id: number) => {
+  const toggleTask = async (id: number) => {
     const task = tasks.find((t) => t.id === id);
     if (!task) return;
     
@@ -87,169 +81,180 @@ export default function Home() {
     if (!error) fetchTasks();
   };
 
-  const confirmTask = async (title: string, message: string) => {
-    if (action === 'edit' && selectedEditTaskId) {
-      const { error } = await supabase
-        .from('tasks')
-        .update({ title, message })
-        .eq('id', selectedEditTaskId);
-      if (!error) fetchTasks();
-    } else {
-      const { error } = await supabase
-        .from('tasks')
-        .insert([{ title, message, status: 0, user_id: user.id }]);
-      if (!error) fetchTasks();
-    }
-    setIsModalVisible(false);
-    setSelectedEditTaskId(null);
-  };
-
-  const handleEditPress = (title: string, message: string, id: number) => {
-    setSelectedEditTaskId(id);
-    setAction('edit');
-    setIsModalVisible(true);
-  };
-
-  const handleCreatePress = () => {
-    setAction('create');
-    setIsModalVisible(true);
-  };
-
-  const handleDeletePress = (id: number) => {
-    setSelectedDeleteTaskId(id);
-    setIsDeleteModalVisible(true);
-  };
-
-  const confirmDeleteTask = async () => {
-    if (!selectedDeleteTaskId) return;
-    
+  const deleteTask = async (id: number) => {
     const { error } = await supabase
       .from('tasks')
       .delete()
-      .eq('id', selectedDeleteTaskId);
+      .eq('id', id);
     
     if (!error) {
       fetchTasks();
-      setIsDeleteModalVisible(false);
     }
   };
 
-  const getFirstName = (name: string) => {
-    const parts = name.split(' ');
-    return parts[0];
-  }
+  const handleTask = async (title: string, message: string, date: Date) => {
+    if (action === 'add') {
+      const { error } = await supabase
+        .from('tasks')
+        .insert([{ title, message, status: 0, do_at: date, user_id: user.id }]);
+      if (!error) fetchTasks();
+    } else if (action === 'edit' && selectedTask) {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ title, message, do_at: date })
+        .eq('id', selectedTask.id);
+      if (!error) fetchTasks();
+    }
+    setModalVisible(false);
+  };
 
-  const getMessage = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Tenha um bom dia,';
-    if (hour >= 12 && hour < 18) return 'Aproveite sua tarde,';
-    if (hour >= 18) return 'Tenha um bom descanso\n Boa noite,';
-  }
-  
-  return (
-    <View className="flex-1">
-      <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
-        <View className="flex flex-col">
-          <Text className="text-4xl text-white font-semibold">Bem-vindo :)</Text>
-          <Text className="text-xl text-neutral-100 font-light">{getMessage()} {getFirstName(user.name)}!</Text>
-        </View>
-      </View>
-
-      <View className="flex-1 mt-36 pb-20">
-        <Text className="text-4xl text-white text-center my-5 font-medium"
-          style={{
-            textShadowColor: 'rgba(0, 0, 0, 0.2)',
-            textShadowOffset: { width: 2, height: 2 },
-            textShadowRadius: 4,
-          }}>
-          Minhas Tarefas
-        </Text>
-
-        {loading ? (
-          <View className="flex-1 items-center justify-center w-full p-6 my-6">
-            <View className="flex flex-row items-center px-6 py-4 rounded-lg">
-              <ActivityIndicator size="large" color="#3B82F6" />
-              <Text className="text-xl font-semibold text-neutral-800 ml-4 animate-pulse">
-                Carregando tarefas...
-              </Text>
-            </View>
-          </View>
-        ) : tasks.length === 0 ? (
-          <View className="bg-white flex flex-col items-center w-full p-6 my-6 rounded-xl shadow-md">
-            <View className="bg-green-100 p-2 rounded-full">
-              <MaterialIcons name="check-circle" size={28} color={'#4CAF50'} />
-            </View>
-            <Text className="text-xl my-2 font-semibold text-neutral-800">Nenhuma tarefa pendente</Text>
-            <Text className="text-neutral-500 text-center">
-              Você concluiu todas as tarefas. Aproveite seu tempo com eficiência!
-            </Text>
-          </View>
-        ) : dragging ? (
-            <View className="flex-1 flex flex-row items-center justify-center w-full p-2">
-              <ActivityIndicator size="small" color="#3B82F6" />
-              <Text className="text-neutral-500 ml-2">Atualizando posições...</Text>
-            </View>
-          ) : (
-          <DraggableFlatList
-            className="px-2"
-            data={tasks}
-            keyExtractor={(item) => item.id.toString()}
-            onDragEnd={handleDragEnd}
-            renderItem={({ item, drag }) => (
-              <TouchableOpacity
-                onLongPress={drag}
-                onPress={() => handleEditPress(item.title, item.message, item.id)}
-                className={`bg-white flex flex-row items-center w-full p-6 mb-2 rounded-xl shadow-lg ${item.status ? 'opacity-70' : ''}`}
-              >
-                <TouchableOpacity onPress={() => changeStatus(item.id)}>
-                  {item.status ? (
-                    <MaterialIcons name="check-box" size={24} color={'#0AC600'} />
-                  ) : (
-                    <MaterialIcons name="check-box-outline-blank" size={24} color={'#000'} />
-                  )}
-                </TouchableOpacity>
-
-                <View className="flex flex-col w-5/6 ms-3">
-                  <Text className={`text-xl mb-1 ${item.status ? 'line-through' : ''}`}>
-                    {item.title}
-                  </Text>
-                  {item.message.length > 0 && (
-                    <Text className={`text-lg font-light text-neutral-600 ${item.status ? 'line-through' : ''}`}>
-                      {item.message}
-                    </Text>
-                  )}
-                </View>
-
-                <TouchableOpacity onPress={() => handleDeletePress(item.id)} className="flex items-center justify-center rounded-full">
-                  <MaterialIcons name="delete" size={24} color={'#FF4646'} />
-                </TouchableOpacity>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-      </View>
-
-      <TouchableOpacity onPress={() => handleCreatePress()} className="bg-blue-500 flex items-center justify-center absolute bottom-24 right-6 p-4 rounded-full shadow-lg">
-        <MaterialIcons name="add" size={36} color='#fff'/>
-      </TouchableOpacity>
-
-      <Menu />
-
-      {/* Modals */}
-      <TaskModal
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        action={action}
-        onConfirm={confirmTask}
-        editTitle={action === 'edit' ? tasks.find(task => task.id === selectedEditTaskId)?.title : ''}
-        editMessage={action === 'edit' ? tasks.find(task => task.id === selectedEditTaskId)?.message : ''}
+  const renderItem = ({ item, drag }) => (
+    <ScaleDecorator>
+      <TaskItem
+        id={item.id}
+        text={item.title}
+        completed={item.status === 1}
+        date={item.do_at}
+        onToggle={toggleTask}
+        onDelete={deleteTask}
+        onLongPress={drag}
+        onPress={() => {
+          setAction('edit');
+          setSelectedTask(item);
+          setModalVisible(true);
+        }}
       />
-
-      <ConfirmDeleteModal
-        visible={isDeleteModalVisible}
-        onCancel={() => setIsDeleteModalVisible(false)}
-        onConfirm={confirmDeleteTask}
-      />
-    </View>
+    </ScaleDecorator>
   );
+
+  return (
+    <View style={styles.container}>
+      <Header
+        title="Ordit"
+        showAddButton={true}
+        onAddPress={() => {
+          setAction('add');
+          setSelectedTask(null);
+          setModalVisible(true);
+        }}
+      />
+      <Animated.View entering={FadeIn.duration(100)} style={styles.content}>
+        {loading ? (
+          <Animated.View entering={FadeIn.duration(100)} style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#ffffff" />
+          </Animated.View>
+        ) : tasks.length > 0 ? (
+          <DraggableFlatList
+            data={tasks}
+            onDragEnd={({ data }) => updateTaskPositions(data)}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={50}
+            keyExtractor={(item) => item.id.toString()}
+            getItemLayout={(data, index) => (
+              { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }
+            )}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.list}
+          />
+        ) : (
+          <Animated.View entering={FadeIn.duration(400)} style={styles.emptyStateContainer}>
+            <Animated.View entering={FadeInDown.duration(600).delay(200)} style={styles.emptyStateIconContainer}>
+              <CheckCheck color="#A9DC4D" size={64} />
+            </Animated.View>
+    
+            <Animated.View entering={FadeInDown.duration(600).delay(400)}>
+              <Text style={styles.emptyStateTitle}>Tudo limpo por aqui!</Text>
+              <Text style={styles.emptyStateSubtitle}>Você não tem nenhuma tarefa pendente</Text>
+            </Animated.View>
+    
+            <Animated.View entering={FadeInDown.duration(600).delay(600)}>
+              <TouchableOpacity style={styles.emptyStateButton} onPress={() => setModalVisible(true)} activeOpacity={0.8}>
+                <Plus color="#000000" size={20} />
+                <Text style={styles.emptyStateButtonText}>Adicionar tarefa</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </Animated.View>
+        )}
+      </Animated.View>
+      <View style={styles.modal}>
+        <TaskModal
+          action={action}
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSubmit={handleTask}
+          task={selectedTask}
+        />
+      </View>
+      <Menu />
+    </View>
+  )
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#000000",
+  },
+  content: {
+    flex: 1,
+  },
+  list: {
+    padding: 20,
+  },
+  modal: {
+    position: 'absolute',
+    top: 0,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+  },
+  emptyStateIconContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: "rgba(169, 220, 77, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  emptyStateTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  emptyStateSubtitle: {
+    fontSize: 16,
+    color: "#AAAAAA",
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  emptyStateButton: {
+    flexDirection: "row",
+    backgroundColor: "#A9DC4D",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyStateButtonText: {
+    color: "#000000",
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: 8,
+  },
+})
+
+export default TasksScreen

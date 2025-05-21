@@ -1,229 +1,334 @@
-import { supabase } from "../services/supabase";
-import { useState } from "react";
-import { ScrollView, View, Text, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store";
-import { MaterialIcons } from '@expo/vector-icons';
-import Menu from "../components/Menu";
-import ConfirmActionModal from "../components/modals/ConfirmActionModal";
-import { logoutUser, setUser } from "../slices/userSlice";
-import { persistor } from '../store';
-import { useNavigation } from "@react-navigation/native";
+"use client"
 
-export default function Settings() {
-  const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
+import React, { useState } from "react"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Switch,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+  Alert,
+} from "react-native"
+import Animated, { FadeIn, FadeInRight } from "react-native-reanimated"
+import { Moon, Bell, Trash2, HelpCircle, Info, ChevronRight, LogOut, User } from "lucide-react-native"
+import Header from "../components/Header"
+import Menu from "../components/Menu"
+import { useSelector, useDispatch } from "react-redux"
+import { RootState } from "../store"
+import { supabase } from "../services/supabase"
+import { logoutUser, setUser } from "../slices/userSlice"
+import { persistor } from "../store"
+import { useNavigation } from "@react-navigation/native"
+import ConfirmActionModal from "../components/modals/ConfirmActionModal"
 
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [isChanged, setIsChanged] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalAction, setModalAction] = useState<'save' | 'delete'>('save');
+const SettingsScreen: React.FC = () => {
+  const user = useSelector((state: RootState) => state.user)
+  const dispatch = useDispatch()
+
+  const navigation = useNavigation()
+
+  const [darkMode, setDarkMode] = useState(true)
+  const [notifications, setNotifications] = useState(true)
+  const [name, setName] = useState(user?.name || "")
+  const [isChanged, setIsChanged] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [modalAction, setModalAction] = useState<"save" | "delete">("save")
+
+  const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
   const handleLogout = () => {
     dispatch(logoutUser());
     persistor.purge();
-    (navigation as any).navigate("Introduction");
-  };
+    (navigation as any).navigate("Introduction")
+  }
 
   const handleDeleteAccount = () => {
-    setModalAction('delete');
-    setIsModalVisible(true);
-  };
-
-  interface UserData {
-    id: number;
-    name: string;
-    email: string;
+    setModalAction("delete")
+    setIsModalVisible(true)
   }
 
   const handleSaveChanges = async (password: string) => {
-    // Verificar a senha para garantir que a pessoa tenha permissão para salvar as mudanças
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signIn({
       email: user?.email!,
       password,
-    });
-  
+    })
+
     if (error || !data.user) {
-      Alert.alert("Erro", "Senha incorreta");
-      return;
+      Alert.alert("Erro", "Senha incorreta")
+      return
     }
-  
-    // Buscanbdo os dados na tabela 'users', utilizando o UUID do 'user.id' retornado da autenticação
-    const { data: userData, error: userDataError } = await supabase
-      .from("users")
-      .select("id, name, email")  // Campos da tabela 'users'
-      .eq("user_id", data.user.id)  // Usando o UUID do usuário da tabela interna
-      .single();
-  
-    if (userDataError || !userData) {
-      Alert.alert("Erro", "Erro ao buscar dados do usuário.");
-      return;
-    }
-  
-    // Atualizando o nome e o email no banco de dados
+
     const { data: updatedData, error: updateError } = await supabase
       .from("users")
-      .update({ name, email })
+      .update({ name })
       .eq("user_id", data.user.id)
       .select()
-      .single<UserData>();
-  
+      .single()
+
     if (updateError) {
-      Alert.alert("Erro", "Erro ao atualizar dados");
-      return;
+      Alert.alert("Erro", "Erro ao atualizar dados")
+      return
     }
-  
-    // Atualiza os dados no Redux e no estado local
-    dispatch(setUser(updatedData));
-    setName(updatedData.name);
-    setEmail(updatedData.email);
-    setIsChanged(false);
-    
-    Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-  };
-  
+
+    dispatch(setUser(updatedData))
+    setName(updatedData.name)
+    setIsChanged(false)
+    Alert.alert("Sucesso", "Alterações salvas com sucesso!")
+  }
+
   const handleDeactivateUser = async (password: string) => {
-    // Tenta autenticar o usuário antes de desativar
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signIn({
       email: user?.email!,
       password,
-    });
-  
+    })
+
     if (error || !data.user) {
-      Alert.alert("Erro", "Senha incorreta");
-      return;
+      Alert.alert("Erro", "Senha incorreta")
+      return
     }
-  
-    // Desativa a conta do usuário (status = 0)
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({ status: 0 })
-      .eq("user_id", data.user.id);
-  
-    if (updateError) {
-      Alert.alert("Erro", "Erro ao desativar conta.");
-      return;
-    }
-  
-    // Deleta todas as tarefas associadas ao usuário
-    const { error: deleteTasksError } = await supabase
-      .from("tasks")
-      .delete()
-      .eq("user_id", user.id);
-  
-    if (deleteTasksError) {
-      Alert.alert("Erro", "Erro ao excluir tarefas do usuário.");
-      console.log('deleteTasksError: ', deleteTasksError)
-      return;
-    }
-  
-    Alert.alert("Conta desativada", "Suas tarefas foram apagadas e seu registro será permanentemente deletado dentro dos próximos meses.");
+
+    await supabase.from("users").update({ status: 0 }).eq("user_id", data.user.id)
+    await supabase.from("tasks").delete().eq("user_id", user.id)
+
+    Alert.alert(
+      "Conta desativada",
+      "Suas tarefas foram apagadas e seu registro será permanentemente deletado dentro dos próximos meses."
+    )
+
     handleLogout()
-  };
+  }
 
   const confirmAction = async (password: string, setLoading: (loading: boolean) => void) => {
     try {
-      if (modalAction === 'delete') {
-        await handleDeactivateUser(password);
+      if (modalAction === "delete") {
+        await handleDeactivateUser(password)
       } else {
-        await handleSaveChanges(password);
+        await handleSaveChanges(password)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     } finally {
-      setLoading(false);
-      setIsModalVisible(false);
+      setLoading(false)
+      setIsModalVisible(false)
     }
-  };
+  }
 
   return (
-    <View className="flex-1">
-      <ScrollView className="flex-1">
-        <View className="absolute w-full flex flex-row items-start justify-between bg-blue-400 py-8 px-6 h-64 rounded-b-3xl">
-          <View className="flex flex-col">
-            <Text className="text-4xl text-white font-semibold">Configurações</Text>
-            <Text className="text-xl w-3/5 text-neutral-100 font-light">Personalize e gerencie os dados de sua conta Lumina</Text>
+    <View style={styles.container}>
+      <Header title="Configurações" />
+
+      <ScrollView style={styles.content}>
+        <Animated.View entering={FadeIn.duration(500)}>
+          <Text style={styles.sectionTitle}>Preferências</Text>
+
+          <View style={styles.card}>
+            <AnimatedTouchableOpacity entering={FadeInRight.delay(100).duration(500)} style={styles.settingItem}>
+              <View style={styles.settingInfo}>
+                <Moon size={22} color="#A9DC4D" />
+                <Text style={styles.settingText}>Tema Escuro</Text>
+              </View>
+              <Switch
+                value={darkMode}
+                onValueChange={setDarkMode}
+                trackColor={{ false: "#666666", true: "#A9DC4D" }}
+                thumbColor="#FFFFFF"
+              />
+            </AnimatedTouchableOpacity>
+
+            <AnimatedTouchableOpacity entering={FadeInRight.delay(200).duration(500)} style={styles.settingItem}>
+              <View style={styles.settingInfo}>
+                <Bell size={22} color="#A9DC4D" />
+                <Text style={styles.settingText}>Notificações</Text>
+              </View>
+              <Switch
+                value={notifications}
+                onValueChange={setNotifications}
+                trackColor={{ false: "#666666", true: "#A9DC4D" }}
+                thumbColor="#FFFFFF"
+              />
+            </AnimatedTouchableOpacity>
           </View>
-        </View>
 
-        <View className="flex items-center mt-36">
-          <Image 
-            source={require("../assets/images/userIcon.png")} 
-            className="h-48 w-48 rounded-full border-4 border-blue-500" 
-          />
-        </View>
+          <Text style={styles.sectionTitle}>Minha Conta</Text>
+          <View style={styles.card}>
+            <View style={styles.inputItem}>
+              <User size={22} color="#A9DC4D" />
+              <TextInput
+                placeholder="Nome"
+                placeholderTextColor="#888"
+                style={styles.input}
+                value={name}
+                onChangeText={(text) => {
+                  setName(text)
+                  setIsChanged(true)
+                }}
+              />
+            </View>
 
-        <View className="px-6 py-2">
-          <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
-            <MaterialIcons name="account-circle" size={22} color="#8B8787" />
-            <TextInput
-              placeholder="Nome"
-              className="flex-1 text-lg text-neutral-800 py-5"
-              value={name}
-              onChangeText={(text) => {
-                setName(text);
-                setIsChanged(true);
-              }}
-            />
+            <View style={styles.inputItem}>
+              <ChevronRight size={22} color="#A9DC4D" />
+              <Text style={[styles.input, { color: "#999" }]}>{user.email}</Text>
+            </View>
+
+            {isChanged && (
+              <TouchableOpacity
+                style={[styles.saveButton, { backgroundColor: "#A9DC4D" }]}
+                onPress={() => {
+                  setModalAction("save")
+                  setIsModalVisible(true)
+                }}
+              >
+                <Text style={styles.saveButtonText}>Salvar Alterações</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
-          <View className="w-full flex flex-row gap-3 mt-6 items-center border-b-2 border-neutral-500">
-            <MaterialIcons name="alternate-email" size={22} color="#8B8787" />
-            <TextInput
-              placeholder="Email"
-              className="flex-1 text-lg text-neutral-800 py-5 opacity-90"
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                setIsChanged(true);
-              }}
-              readOnly
-            />
+          <Text style={styles.sectionTitle}>Dados</Text>
+          <View style={styles.card}>
+            <AnimatedTouchableOpacity
+              entering={FadeInRight.delay(300).duration(500)}
+              style={styles.settingItem}
+              onPress={handleDeleteAccount}
+            >
+              <View style={styles.settingInfo}>
+                <Trash2 size={22} color="#ff6b6b" />
+                <Text style={styles.settingText}>Excluir Conta</Text>
+              </View>
+              <ChevronRight size={20} color="#9e9e9e" />
+            </AnimatedTouchableOpacity>
           </View>
-        </View>
 
-        <View className="px-6 mt-8">
-          <TouchableOpacity 
-            onPress={() => { setModalAction('save'); setIsModalVisible(true); }}
-            disabled={!isChanged}
-            className={`${isChanged ? 'opacity-100' : 'opacity-70'} flex flex-row items-center justify-center w-full bg-blue-500 py-4 rounded-lg shadow-xl`}
-          >
-            <Text className="text-xl text-white font-semibold">Salvar Alterações</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.sectionTitle}>Sobre</Text>
+          <View style={styles.card}>
+            <AnimatedTouchableOpacity entering={FadeInRight.delay(400).duration(500)} style={styles.settingItem}>
+              <View style={styles.settingInfo}>
+                <HelpCircle size={22} color="#A9DC4D" />
+                <Text style={styles.settingText}>Ajuda</Text>
+              </View>
+              <ChevronRight size={20} color="#9e9e9e" />
+            </AnimatedTouchableOpacity>
 
-        <View className="mt-8 border-t-2 border-neutral-400 pt-4 px-2">
-          <TouchableOpacity 
-            onPress={handleLogout}
-            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-8 rounded-xl border-t-0 border border-neutral-400"
-          >
-            <MaterialIcons name="logout" size={22} color="black" />
-            <Text className="text-xl text-black font-semibold ml-4">Sair da Conta</Text>
+            <AnimatedTouchableOpacity entering={FadeInRight.delay(500).duration(500)} style={styles.settingItem}>
+              <View style={styles.settingInfo}>
+                <Info size={22} color="#A9DC4D" />
+                <Text style={styles.settingText}>Sobre o Ordit</Text>
+              </View>
+              <ChevronRight size={20} color="#9e9e9e" />
+            </AnimatedTouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <LogOut size={20} color="#fff" />
+            <Text style={styles.logoutText}>Sair da Conta</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            onPress={handleDeleteAccount}
-            className="flex flex-row items-center justify-center w-full bg-neutral-200 py-8 rounded-xl border-t-0 border mt-1 border-neutral-400"
-          >
-            <MaterialIcons name="delete" size={22} color="red" />
-            <Text className="text-xl text-red-600 font-semibold ml-4">Excluir Conta</Text>
-          </TouchableOpacity>
-        </View>
-        <View className="mt-12 mb-8">
-            <Text className="text-xl text-neutral-500 text-center">Ver 1.1.01</Text>
-        </View>
+          <View style={styles.versionContainer}>
+            <Text style={styles.versionText}>Ordit v1.0.0</Text>
+          </View>
+        </Animated.View>
       </ScrollView>
 
       <Menu />
 
-      <ConfirmActionModal 
-        visible={isModalVisible} 
-        onCancel={() => setIsModalVisible(false)} 
-        onConfirm={confirmAction} 
-        action={modalAction} 
+      <ConfirmActionModal
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        onConfirm={confirmAction}
+        action={modalAction}
       />
     </View>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#000000",
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 12,
+    marginTop: 20,
+  },
+  card: {
+    backgroundColor: "#121212",
+    borderRadius: 12,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#333333",
+    marginBottom: 16,
+  },
+  settingItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333333",
+  },
+  settingInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  settingText: {
+    fontSize: 16,
+    color: "#FFFFFF",
+    marginLeft: 12,
+  },
+  inputItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333333",
+  },
+  input: {
+    marginLeft: 12,
+    color: "#FFFFFF",
+    fontSize: 16,
+    flex: 1,
+  },
+  saveButton: {
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#333333",
+    alignItems: "center",
+  },
+  saveButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  logoutButton: {
+    marginTop: 20,
+    backgroundColor: "#333",
+    padding: 16,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoutText: {
+    color: "#fff",
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  versionContainer: {
+    alignItems: "center",
+    marginVertical: 30,
+  },
+  versionText: {
+    fontSize: 14,
+    color: "#9e9e9e",
+  },
+})
+
+export default SettingsScreen

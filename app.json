@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Lumina",
-    "slug": "Lumina",
+    "name": "Ordit",
+    "slug": "Ordit",
     "version": "1.0.0",
     "web": {
       "favicon": "./assets/icon.png"
@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "newArchEnabled": false,
-      "bundleIdentifier": "com.jessebarbosa.Lumina"
+      "bundleIdentifier": "com.jessebarbosa.Ordit"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +32,7 @@
         "backgroundColor": "#ffffff"
       },
       "newArchEnabled": false,
-      "package": "com.jessebarbosa.Lumina",
+      "package": "com.jessebarbosa.Ordit",
       "permissions": []
     },
     "jsEngine": "hermes",

@@ -1,70 +1,140 @@
-import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import React, { useState } from "react"
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native"
 
 interface ConfirmActionModalProps {
-  visible: boolean;
-  onCancel: () => void;
-  onConfirm: (password: string, setLoading: (loading: boolean) => void) => void;
-  action: 'delete' | 'save';
+  visible: boolean
+  onCancel: () => void
+  onConfirm: (password: string, setLoading: (loading: boolean) => void) => void
+  action: "delete" | "save"
 }
 
-const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({ visible, onCancel, onConfirm, action }) => {
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+const ConfirmActionModal: React.FC<ConfirmActionModalProps> = ({
+  visible,
+  onCancel,
+  onConfirm,
+  action,
+}) => {
+  const [password, setPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleConfirm = () => {
-    setIsLoading(true);
-    onConfirm(password, setIsLoading);
-    setPassword('')
-  };
+    setIsLoading(true)
+    onConfirm(password, setIsLoading)
+    setPassword("")
+  }
 
   return (
-    <Modal visible={visible} transparent>
-      <View className="flex-1 justify-center items-center bg-black/50">
-        <View className="bg-white p-6 rounded-lg w-5/6">
-          <Text className="text-2xl font-semibold text-center mt-2 mb-4">
-            Digite sua senha para confirmar
-          </Text>
+    <Modal visible={visible} transparent animationType="fade">
+      <View style={styles.overlay}>
+        <View style={styles.modal}>
+          <Text style={styles.title}>Digite sua senha para confirmar</Text>
 
           <TextInput
             secureTextEntry
             placeholder="Senha"
+            placeholderTextColor="#888"
             value={password}
             onChangeText={setPassword}
             editable={!isLoading}
-            className="w-full border-b-2 border-neutral-300 py-2 mb-6 text-lg"
+            style={styles.input}
           />
 
-          <View className="flex-row justify-between">
-            <View className="w-1/2 pe-2">
-              <TouchableOpacity
-                onPress={onCancel}
-                disabled={isLoading}
-                className="bg-neutral-300 px-4 py-3 rounded-lg"
-              >
-                <Text className="text-black text-center">Cancelar</Text>
-              </TouchableOpacity>
-            </View>
-            <View className="w-1/2 pe-2">
-              <TouchableOpacity
-                onPress={handleConfirm}
-                disabled={isLoading}
-                className="bg-blue-500 px-4 py-3 rounded-lg flex-row justify-center"
-              >
-                {isLoading ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <Text className="text-white text-center">
-                    {action === 'delete' ? 'Excluir' : 'Salvar'}
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
+          <View style={styles.actions}>
+            <TouchableOpacity
+              onPress={onCancel}
+              disabled={isLoading}
+              style={[styles.button, styles.cancelButton]}
+            >
+              <Text style={styles.cancelText}>Cancelar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleConfirm}
+              disabled={isLoading}
+              style={[styles.button, action === "delete" ? styles.deleteButton : styles.saveButton]}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.confirmText}>
+                  {action === "delete" ? "Excluir" : "Salvar"}
+                </Text>
+              )}
+            </TouchableOpacity>
           </View>
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
-export default ConfirmActionModal;
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modal: {
+    backgroundColor: "#121212",
+    borderRadius: 16,
+    padding: 24,
+    width: "85%",
+    borderWidth: 1,
+    borderColor: "#333",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#fff",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  input: {
+    borderBottomWidth: 1.5,
+    borderBottomColor: "#555",
+    paddingVertical: 10,
+    fontSize: 16,
+    color: "#fff",
+    marginBottom: 30,
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    marginHorizontal: 5,
+  },
+  cancelButton: {
+    backgroundColor: "#333",
+  },
+  cancelText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  saveButton: {
+    backgroundColor: "#A9DC4D",
+  },
+  deleteButton: {
+    backgroundColor: "#ff4d4d",
+  },
+  confirmText: {
+    color: "#000",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+})
+
+export default ConfirmActionModal
