@@ -1,6 +1,6 @@
 {
   "cesVersion": "2.12.3",
-  "projectName": "Lumina",
+  "projectName": "Ordit",
   "packages": [
     {
       "name": "nativewind",
