@@ -35,6 +35,10 @@
       "package": "com.jessebarbosa.Ordit",
       "permissions": []
     },
+    "androidNavigationBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#121212"
+    },
     "jsEngine": "hermes",
     "owner": "jessebarbosa",
     "extra": {
