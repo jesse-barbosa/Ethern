@@ -123,7 +123,7 @@ export default function Introduction() {
       {/* Logo section */}
       <Animated.View entering={FadeIn.duration(800)} style={styles.logoContainer}>
         <Animated.View style={[styles.logoWrapper, scaleStyle]}>
-          <Image source={require("../assets/icon.png")} style={styles.logo} />
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
         </Animated.View>
         <Animated.Text entering={FadeInDown.duration(800).delay(400)} style={styles.appName}>
           Ordit

@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ title, showAddButton = false, onAddPres
     <SafeAreaView edges={["top"]} style={styles.safeArea}>
       <Animated.View entering={FadeInDown.duration(500).springify()} style={styles.container}>
         <View style={styles.titleContainer}>
-          <Image source={require("../assets/icon.png")} style={styles.logo} />
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
           <Text style={styles.title}>{title}</Text>
         </View>
 
