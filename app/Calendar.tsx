@@ -165,8 +165,12 @@ const CalendarScreen: React.FC = () => {
           }}
           markedDates={getMarkedDates()}
           onDayPress={(day) => {
-            setSelectedDate(new Date(day.timestamp))
+            const [year, month, dayNum] = day.dateString.split('-').map(Number);
+            // Force the time to 12:00 PM, preventing offset to previous day
+            const safeDate = new Date(year, month - 1, dayNum, 12);
+            setSelectedDate(safeDate);
           }}
+          
           enableSwipeMonths={true}
           style={styles.calendar}
         />
