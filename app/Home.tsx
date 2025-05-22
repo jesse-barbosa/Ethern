@@ -6,6 +6,7 @@ import { supabase } from "../services/supabase";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Text } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
 import type { Task } from "../@types/tasks"
@@ -169,7 +170,7 @@ const TasksScreen: React.FC = () => {
   )
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header
         title="Ordit"
         showAddButton={true}
@@ -259,7 +260,7 @@ const TasksScreen: React.FC = () => {
       </View>
 
       <Menu />
-    </View>
+    </SafeAreaView>
   )
 }
 

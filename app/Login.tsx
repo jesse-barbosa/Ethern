@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { setUser } from "../slices/userSlice"
 import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from "@react-navigation/native"
 import { MaterialIcons } from "@expo/vector-icons"
 import { LinearGradient } from "expo-linear-gradient"
@@ -62,7 +63,7 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <Animated.View entering={FadeIn.duration(500)} style={styles.header}>
         <TouchableOpacity onPress={() => (navigation as any).navigate("Introduction")} style={styles.backButton}>
@@ -132,7 +133,7 @@ export default function Login() {
           </TouchableOpacity>
         </View>
       </Animated.View>
-    </View>
+    </SafeAreaView>
   )
 }
 

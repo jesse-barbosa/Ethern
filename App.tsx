@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { StatusBar } from 'expo-status-bar';
 import { MenuProvider } from 'react-native-popup-menu';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 if (typeof global.Buffer === 'undefined') {
   global.Buffer = Buffer;
@@ -26,20 +27,22 @@ export default function App() {
   const Stack = createStackNavigator();
 
   return (
-    <Provider store={store}>
-      <MenuProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Introduction">
-            <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false, }} />
-            <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false, animation: 'none' }} />
-            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'none' }} />
-            <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false, animation: 'none' }} />
-            <Stack.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false, animation: 'none' }} />
-            <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false, animation: 'none' }} />
-          </Stack.Navigator>
-        </NavigationContainer>
-        <StatusBar style="auto" />
-      </MenuProvider>
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <MenuProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Introduction">
+              <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false, animation: 'none' }} />
+              <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'none' }} />
+              <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false, animation: 'none' }} />
+              <Stack.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false, animation: 'none' }} />
+              <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false, animation: 'none' }} />
+            </Stack.Navigator>
+          </NavigationContainer>
+          <StatusBar style="auto" />
+        </MenuProvider>
+      </Provider>
+    </SafeAreaProvider>
   );
 }

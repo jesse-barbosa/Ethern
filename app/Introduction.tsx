@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import type { RootState } from "../store"
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, StatusBar } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from "@react-navigation/native"
 import Animated, {
   FadeIn,
@@ -104,7 +105,7 @@ export default function Introduction() {
   })
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
 
       {/* Background elements */}
@@ -179,7 +180,7 @@ export default function Introduction() {
           </LinearGradient>
         </TouchableOpacity>
       </Animated.View>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000000",
     justifyContent: "space-between",
-    paddingVertical: 60,
+    paddingVertical: 30,
     paddingHorizontal: 24,
     position: "relative",
     overflow: "hidden",

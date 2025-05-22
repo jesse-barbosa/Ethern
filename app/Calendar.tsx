@@ -12,7 +12,8 @@ import type { Task } from "../@types/tasks"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
 import CalendarTaskList from "../components/CalendarTaskList"
-import { TouchableOpacity, Text } from "react-native"
+import { TouchableOpacity } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context';
 import TaskModal from "../components/modals/TaskModal"
 import { Plus } from "lucide-react-native"
 
@@ -128,7 +129,7 @@ const CalendarScreen: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="Calendário" />
 
       <Animated.View entering={FadeIn.duration(500)} style={styles.content}>
@@ -196,7 +197,7 @@ const CalendarScreen: React.FC = () => {
           selectedDate={selectedDate}
         />
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 

@@ -1,6 +1,5 @@
 import type React from "react"
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 import Animated, { FadeInDown } from "react-native-reanimated"
 import { Plus } from "lucide-react-native"
 
@@ -12,7 +11,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ title, showAddButton = false, onAddPress }) => {
   return (
-    <SafeAreaView edges={["top"]} style={styles.safeArea}>
       <Animated.View entering={FadeInDown.duration(500).springify()} style={styles.container}>
         <View style={styles.titleContainer}>
           <Image source={require("../assets/logo.png")} style={styles.logo} />
@@ -25,7 +23,6 @@ const Header: React.FC<HeaderProps> = ({ title, showAddButton = false, onAddPres
           </TouchableOpacity>
         )}
       </Animated.View>
-    </SafeAreaView>
   )
 }
 
@@ -38,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingBottom: 16,
     backgroundColor: "#000000",
     borderBottomWidth: 1,
     borderBottomColor: "#333333",

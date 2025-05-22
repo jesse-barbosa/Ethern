@@ -11,6 +11,7 @@ import {
   TextInput,
   Alert,
 } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInRight } from "react-native-reanimated"
 import { Moon, Bell, Trash2, HelpCircle, Info, ChevronRight, LogOut, User } from "lucide-react-native"
 import Header from "../components/Header"
@@ -116,7 +117,7 @@ const SettingsScreen: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="Configurações" />
 
       <ScrollView style={styles.content}>
@@ -238,7 +239,7 @@ const SettingsScreen: React.FC = () => {
         onConfirm={confirmAction}
         action={modalAction}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
