@@ -1,12 +1,7 @@
 {
   "cesVersion": "2.12.3",
   "projectName": "Ordit",
-  "packages": [
-    {
-      "name": "nativewind",
-      "type": "styling"
-    }
-  ],
+  "packages": [],
   "flags": {
     "noGit": false,
     "noInstall": false,

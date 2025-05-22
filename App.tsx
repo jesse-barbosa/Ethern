@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { StatusBar } from 'expo-status-bar';
 import { MenuProvider } from 'react-native-popup-menu';
-import './global.css';
 
 if (typeof global.Buffer === 'undefined') {
   global.Buffer = Buffer;

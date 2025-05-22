@@ -36,11 +36,11 @@
       "permissions": []
     },
     "jsEngine": "hermes",
+    "owner": "jessebarbosa",
     "extra": {
       "eas": {
-        "projectId": "323268ff-e992-47db-b7f4-66ea77d86fe8"
+        "projectId": "7262a1d3-cb37-44ac-b662-9ab3419f6134"
       }
-    },
-    "owner": "jessebarbosa"
+    }
   }
 }

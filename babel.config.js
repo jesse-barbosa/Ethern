@@ -2,8 +2,7 @@ module.exports = function(api) {
   api.cache(true);
   return {
     presets: [
-      ['babel-preset-expo', { jsxImportSource: 'nativewind' }], 
-      'nativewind/babel'
+      'babel-preset-expo',
     ],
     plugins: [
       [
@@ -25,7 +24,7 @@ module.exports = function(api) {
           },
         },
       ],
-      ['module:react-native-dotenv']
+      ['module:react-native-dotenv'],
     ],
   };
 };

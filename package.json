@@ -23,7 +23,6 @@
     "expo-linear-gradient": "^14.1.4",
     "expo-status-bar": "~2.2.3",
     "lucide-react-native": "^0.511.0",
-    "nativewind": "latest",
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-calendars": "^1.1312.0",
@@ -44,7 +43,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@react-native-community/cli": "^17.0.0",
-    "@types/react": "~18.3.12",
+    "@types/react": "^19.1.5",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
     "babel-plugin-module-resolver": "^5.0.2",
