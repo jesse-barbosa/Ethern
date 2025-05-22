@@ -51,10 +51,10 @@ export default function Login() {
     console.log("Usuário carregado:", userData)
 
     // Salva usuário no Redux
-    dispatch(setUser(userData))(
-      // Redirecionar para Home
-      navigation as any,
-    ).navigate("Home")
+    dispatch(setUser(userData));
+
+    // Redireciona para a Home
+    (navigation as any).navigate("Home");
   }
 
   const togglePasswordVisibility = () => {
