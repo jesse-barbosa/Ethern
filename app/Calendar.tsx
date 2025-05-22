@@ -130,7 +130,15 @@ const CalendarScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Calendário" />
+      <Header
+       title="Calendário"
+       showAddButton={true}
+       onAddPress={() => {
+        setAction('add');
+        setSelectedTask(null);
+        setModalVisible(true);
+       }}
+      />
 
       <Animated.View entering={FadeIn.duration(500)} style={styles.content}>
         <Calendar
@@ -173,17 +181,6 @@ const CalendarScreen: React.FC = () => {
           setModalVisible={setModalVisible}
         />
       </Animated.View>
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => {
-          setAction('add');
-          setSelectedTask(null);
-          setModalVisible(true);
-        }} 
-        activeOpacity={0.8}
-      >
-        <Plus size={24} color="#000000" />
-      </TouchableOpacity>
 
       <Menu />
 
