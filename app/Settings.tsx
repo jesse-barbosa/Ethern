@@ -214,7 +214,7 @@ const SettingsScreen: React.FC = () => {
             <AnimatedTouchableOpacity entering={FadeInRight.delay(500).duration(500)} style={styles.settingItem}>
               <View style={styles.settingInfo}>
                 <Info size={22} color="#A9DC4D" />
-                <Text style={styles.settingText}>Sobre o Ordit</Text>
+                <Text style={styles.settingText}>Sobre o Ethern</Text>
               </View>
               <ChevronRight size={20} color="#9e9e9e" />
             </AnimatedTouchableOpacity>
@@ -226,7 +226,7 @@ const SettingsScreen: React.FC = () => {
           </TouchableOpacity>
 
           <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>Ordit v1.0.0</Text>
+            <Text style={styles.versionText}>Ethern v1.0.0</Text>
           </View>
         </Animated.View>
       </ScrollView>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Ordit",
-    "slug": "Ordit",
+    "name": "Ethern",
+    "slug": "Ethern",
     "version": "1.0.0",
     "web": {
       "favicon": "./assets/logo.png"
@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "newArchEnabled": false,
-      "bundleIdentifier": "com.jessebarbosa.Ordit"
+      "bundleIdentifier": "com.jessebarbosa.Ethern"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +32,7 @@
         "backgroundColor": "#121212"
       },
       "newArchEnabled": false,
-      "package": "com.jessebarbosa.Ordit",
+      "package": "com.jessebarbosa.Ethern",
       "permissions": []
     },
     "androidNavigationBar": {

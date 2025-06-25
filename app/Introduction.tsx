@@ -127,7 +127,7 @@ export default function Introduction() {
           <Image source={require("../assets/logo.png")} style={styles.logo} />
         </Animated.View>
         <Animated.Text entering={FadeInDown.duration(800).delay(400)} style={styles.appName}>
-          Ordit
+          Ethern
         </Animated.Text>
         <Animated.Text entering={FadeInDown.duration(800).delay(600)} style={styles.tagline}>
           Simplicidade e produtividade

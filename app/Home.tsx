@@ -172,7 +172,7 @@ const TasksScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Ordit"
+        title="Ethern"
         showAddButton={true}
         onAddPress={() => {
           setAction('add');

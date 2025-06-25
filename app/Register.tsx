@@ -102,7 +102,7 @@ export default function Register() {
         </TouchableOpacity>
 
         <Animated.Text entering={FadeInDown.duration(600).delay(200)} style={styles.appName}>
-          Ordit
+          Ethern
         </Animated.Text>
         <View />
       </Animated.View>
