@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "newArchEnabled": false,
-      "bundleIdentifier": "com.jessebarbosa.Ethern"
+      "bundleIdentifier": "com.jessebarbosa.ethern"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +32,7 @@
         "backgroundColor": "#121212"
       },
       "newArchEnabled": false,
-      "package": "com.jessebarbosa.Ethern",
+      "package": "com.jessebarbosa.ethern",
       "permissions": []
     },
     "androidNavigationBar": {
@@ -43,7 +43,7 @@
     "owner": "jessebarbosa",
     "extra": {
       "eas": {
-        "projectId": "7262a1d3-cb37-44ac-b662-9ab3419f6134"
+        "projectId": "b0d84a72-8867-45f5-9b3d-f154dbcd9988"
       }
     }
   }
