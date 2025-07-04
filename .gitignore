@@ -10,6 +10,9 @@ npm-debug.*
 *.orig.*
 web-build/
 
+# IDE files
+.idea/
+
 ios
 android
 
