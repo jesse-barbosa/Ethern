@@ -28,7 +28,6 @@
     "react-native-calendars": "^1.1312.0",
     "react-native-config": "^1.5.5",
     "react-native-css-interop": "^0.1.22",
-    "react-native-dotenv": "^3.4.11",
     "react-native-draggable-flatlist": "^4.0.3",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-popup-menu": "^0.17.0",
