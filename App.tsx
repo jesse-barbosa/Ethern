@@ -2,6 +2,7 @@ import React from 'react';
 import 'react-native-url-polyfill/auto';
 import { Buffer } from 'buffer';
 import { enableScreens } from 'react-native-screens';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
@@ -31,14 +32,16 @@ export default function App() {
       <Provider store={store}>
         <MenuProvider>
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Introduction">
-              <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false, animation: 'none' }} />
-              <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'none' }} />
-              <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false, animation: 'none' }} />
-              <Stack.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false, animation: 'none' }} />
-              <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false, animation: 'none' }} />
-            </Stack.Navigator>
+            <SafeAreaView style={{ flex: 1 }}>
+              <Stack.Navigator initialRouteName="Introduction" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Introduction" component={IntroductionScreen} />
+                <Stack.Screen name="Register" component={RegisterScreen} options={{ animation: 'none' }} />
+                <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'none' }} />
+                <Stack.Screen name="Home" component={HomeScreen} options={{ animation: 'none' }} />
+                <Stack.Screen name="Calendar" component={CalendarScreen} options={{ animation: 'none' }} />
+                <Stack.Screen name="Settings" component={SettingsScreen} options={{ animation: 'none' }} />
+              </Stack.Navigator>
+            </SafeAreaView>
           </NavigationContainer>
           <StatusBar style="auto" />
         </MenuProvider>
