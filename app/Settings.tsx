@@ -5,7 +5,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Switch,
   TouchableOpacity,
   ScrollView,
   TextInput,
@@ -13,7 +12,7 @@ import {
 } from "react-native"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInRight } from "react-native-reanimated"
-import { Moon, Bell, Trash2, HelpCircle, Info, ChevronRight, LogOut, User } from "lucide-react-native"
+import { Trash2, HelpCircle, Info, ChevronRight, LogOut, User } from "lucide-react-native"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
 import { useSelector, useDispatch } from "react-redux"
@@ -30,8 +29,6 @@ const SettingsScreen: React.FC = () => {
 
   const navigation = useNavigation()
 
-  const [darkMode, setDarkMode] = useState(true)
-  const [notifications, setNotifications] = useState(true)
   const [name, setName] = useState(user?.name || "")
   const [isChanged, setIsChanged] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -122,36 +119,6 @@ const SettingsScreen: React.FC = () => {
 
       <ScrollView style={styles.content}>
         <Animated.View entering={FadeIn.duration(500)}>
-          <Text style={styles.sectionTitle}>Preferências</Text>
-
-          <View style={styles.card}>
-            <AnimatedTouchableOpacity entering={FadeInRight.delay(100).duration(500)} style={styles.settingItem}>
-              <View style={styles.settingInfo}>
-                <Moon size={22} color="#A9DC4D" />
-                <Text style={styles.settingText}>Tema Escuro</Text>
-              </View>
-              <Switch
-                value={darkMode}
-                onValueChange={setDarkMode}
-                trackColor={{ false: "#666666", true: "#A9DC4D" }}
-                thumbColor="#FFFFFF"
-              />
-            </AnimatedTouchableOpacity>
-
-            <AnimatedTouchableOpacity entering={FadeInRight.delay(200).duration(500)} style={styles.settingItem}>
-              <View style={styles.settingInfo}>
-                <Bell size={22} color="#A9DC4D" />
-                <Text style={styles.settingText}>Notificações</Text>
-              </View>
-              <Switch
-                value={notifications}
-                onValueChange={setNotifications}
-                trackColor={{ false: "#666666", true: "#A9DC4D" }}
-                thumbColor="#FFFFFF"
-              />
-            </AnimatedTouchableOpacity>
-          </View>
-
           <Text style={styles.sectionTitle}>Minha Conta</Text>
           <View style={styles.card}>
             <View style={styles.inputItem}>
