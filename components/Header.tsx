@@ -4,17 +4,16 @@ import Animated, { FadeInDown } from "react-native-reanimated"
 import { Plus } from "lucide-react-native"
 
 interface HeaderProps {
-  title: string
   showAddButton?: boolean
   onAddPress?: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({ title, showAddButton = false, onAddPress }) => {
+const Header: React.FC<HeaderProps> = ({ showAddButton = false, onAddPress }) => {
   return (
       <Animated.View entering={FadeInDown.duration(500).springify()} style={styles.container}>
         <View style={styles.titleContainer}>
           <Image source={require("../assets/logo.png")} style={styles.logo} />
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>Ethern</Text>
         </View>
 
         {showAddButton && (

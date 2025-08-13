@@ -131,7 +131,6 @@ const CalendarScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-       title="Calendário"
        showAddButton={true}
        onAddPress={() => {
         setAction('add');

@@ -115,7 +115,7 @@ const SettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Configurações" />
+      <Header />
 
       <ScrollView style={styles.content}>
         <Animated.View entering={FadeIn.duration(500)}>
