@@ -167,36 +167,19 @@ const SettingsScreen: React.FC = () => {
               <ChevronRight size={20} color="#9e9e9e" />
             </AnimatedTouchableOpacity>
           </View>
-
-          <Text style={styles.sectionTitle}>Sobre</Text>
-          <View style={styles.card}>
-            <AnimatedTouchableOpacity entering={FadeInRight.delay(400).duration(500)} style={styles.settingItem}>
-              <View style={styles.settingInfo}>
-                <HelpCircle size={22} color="#A9DC4D" />
-                <Text style={styles.settingText}>Ajuda</Text>
-              </View>
-              <ChevronRight size={20} color="#9e9e9e" />
-            </AnimatedTouchableOpacity>
-
-            <AnimatedTouchableOpacity entering={FadeInRight.delay(500).duration(500)} style={styles.settingItem}>
-              <View style={styles.settingInfo}>
-                <Info size={22} color="#A9DC4D" />
-                <Text style={styles.settingText}>Sobre o Ethern</Text>
-              </View>
-              <ChevronRight size={20} color="#9e9e9e" />
-            </AnimatedTouchableOpacity>
-          </View>
-
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <LogOut size={20} color="#fff" />
-            <Text style={styles.logoutText}>Sair da Conta</Text>
-          </TouchableOpacity>
-
-          <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>Ethern v1.0.0</Text>
-          </View>
         </Animated.View>
       </ScrollView>
+
+      <Animated.View entering={FadeIn.duration(500)} style={styles.logoutContainer}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <LogOut size={20} color="#fff" />
+          <Text style={styles.logoutText}>Sair da Conta</Text>
+        </TouchableOpacity>
+
+        <View style={styles.versionContainer}>
+          <Text style={styles.versionText}>Ethern v1.0.0</Text>
+        </View>
+      </Animated.View>
 
       <View style={styles.menuContainer}>
         <Menu />
@@ -277,6 +260,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
   },
+  logoutContainer: {
+    padding: 20,
+  },
   logoutButton: {
     marginTop: 20,
     backgroundColor: "#333",
@@ -294,6 +280,7 @@ const styles = StyleSheet.create({
   versionContainer: {
     alignItems: "center",
     marginVertical: 30,
+    marginBottom: 25,
   },
   versionText: {
     fontSize: 14,
