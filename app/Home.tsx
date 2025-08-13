@@ -204,7 +204,7 @@ const TasksScreen: React.FC = () => {
             getItemLayout={(data, index) => ({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index })}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.list}
+            contentContainerStyle={[styles.list, { paddingBottom: 20 }]}
           />
         ) : (
           <Animated.View entering={FadeIn.duration(400)} style={styles.emptyStateContainer}>
@@ -259,7 +259,9 @@ const TasksScreen: React.FC = () => {
         />
       </View>
 
-      <Menu />
+      <View style={styles.menuContainer}>
+        <Menu />
+      </View>
     </SafeAreaView>
   )
 }
@@ -276,6 +278,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    height: "100%",
   },
   list: {
     padding: 20,
@@ -326,6 +329,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 8,
+  },
+  menuContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#000',
   },
 })
 

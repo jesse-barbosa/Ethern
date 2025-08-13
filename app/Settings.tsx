@@ -198,7 +198,9 @@ const SettingsScreen: React.FC = () => {
         </Animated.View>
       </ScrollView>
 
-      <Menu />
+      <View style={styles.menuContainer}>
+        <Menu />
+      </View>
 
       <ConfirmActionModal
         visible={isModalVisible}
@@ -296,6 +298,13 @@ const styles = StyleSheet.create({
   versionText: {
     fontSize: 14,
     color: "#9e9e9e",
+  },
+  menuContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#000',
   },
 })
 
