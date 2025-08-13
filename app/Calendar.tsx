@@ -12,10 +12,8 @@ import type { Task } from "../@types/tasks"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
 import CalendarTaskList from "../components/CalendarTaskList"
-import { TouchableOpacity } from "react-native"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TaskModal from "../components/modals/TaskModal"
-import { Plus } from "lucide-react-native"
 
 const CalendarScreen: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);

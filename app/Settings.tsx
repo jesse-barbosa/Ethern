@@ -12,7 +12,7 @@ import {
 } from "react-native"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInRight } from "react-native-reanimated"
-import { Trash2, HelpCircle, Info, ChevronRight, LogOut, User } from "lucide-react-native"
+import { Trash2,  ChevronRight, LogOut, User } from "lucide-react-native"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
 import { useSelector, useDispatch } from "react-redux"
